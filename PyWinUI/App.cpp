@@ -78,11 +78,11 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 	//pathA.Replace('\\', '/');
 	try
 	{
-/*		PyRun_SimpleString("import sys");
+		PyRun_SimpleString("import sys");
 		PyRun_SimpleString(
-			(std::string("if not '") + (LPCSTR)pathA + "\\Python27' in sys.path: \n"
-			"    sys.path.append('" + (LPCSTR)pathA + "\\Python27')    \n").c_str());
-		PyRun_SimpleString((std::string("if not '") + (LPCSTR)pathA + "\\DLLs' in sys.path: \n"
+			(std::string("if not '") + (LPCSTR)pathA + "' in sys.path: \n"
+			"    sys.path.append('" + (LPCSTR)pathA + "')\n").c_str());
+/*		PyRun_SimpleString((std::string("if not '") + (LPCSTR)pathA + "\\DLLs' in sys.path: \n"
 			"    sys.path.append('" + (LPCSTR)pathA + "\\DLLs')    \n").c_str()
 			);
 		PyRun_SimpleString("import sys");

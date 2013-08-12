@@ -4,7 +4,7 @@
 class PyLog
 {
 public:
-	void LogText(LPCSTR pstrText)
+	static void LogText(LPCSTR pstrText)
 	{
 		LOGA(pstrText);
 	}

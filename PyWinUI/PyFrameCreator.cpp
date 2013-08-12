@@ -17,7 +17,7 @@ PyFrameCreator::~PyFrameCreator()
 {
 }
 
-object PyFrameCreator::CreateForm(ULONG hParent, LPCSTR pyModule, LPCSTR pyClassName)
+object PyFrameCreator::CreateForm(ULONG hParent, LPCSTR pyModule, LPCSTR pyClassName, LPCSTR pyFormCaption)
 {
 	m_pyModule = pyModule;
 	m_pyClassName = pyClassName;
@@ -35,7 +35,7 @@ object PyFrameCreator::CreateForm(ULONG hParent, LPCSTR pyModule, LPCSTR pyClass
 		return m_InstanceUI;
 
 	m_pyFrameUI->SetPyBaseUI(m_pyBaseUI);
-	HWND hWnd = m_pyFrameUI->Create((HWND)hParent, _T("Python界面开发示例"), UI_WNDSTYLE_DIALOG, 0, 0, 0, 0, 0, NULL);
+	HWND hWnd = m_pyFrameUI->Create((HWND)hParent, pyFormCaption, UI_WNDSTYLE_FRAME, WS_EX_STATICEDGE | WS_EX_APPWINDOW, 0, 0, 0, 0, NULL);
 	m_pyBaseUI->SetHWnd((ULONG)hWnd);
 	m_pyBaseUI->SetPyFrameUI(m_pyFrameUI);
 
