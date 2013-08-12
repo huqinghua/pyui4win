@@ -22,3 +22,4 @@ if __name__ == "__main__":
     if os.path.isfile(r".\bin\_PyDui4Win.pyd"):
         shutil.copyfile(r".\bin\_PyDui4Win.pyd", r".\Demo1\_PyDui4Win.pyd")
         shutil.copyfile(r".\bin\_PyDui4Win.pyd", r".\Demo2\_PyDui4Win.pyd")
+
