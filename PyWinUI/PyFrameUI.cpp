@@ -115,6 +115,13 @@ void PyFrameUI::OnPrepare(TNotifyUI& msg)
 {
 	CString name = msg.pSender->GetName();
 	m_frame->OnPrepare((LPCSTR)name, msg.wParam, msg.lParam);
+
+	HICON hIcon = (HICON)::LoadImage(CPaintManagerUI::GetInstance(), MAKEINTRESOURCE(IDI_ICON_WINGIRL), IMAGE_ICON, ::GetSystemMetrics(SM_CXICON), ::GetSystemMetrics(SM_CYICON), LR_DEFAULTCOLOR);
+	ASSERT(hIcon);
+	::SendMessage(m_hWnd, WM_SETICON, (WPARAM) TRUE, (LPARAM) hIcon);
+	hIcon = (HICON)::LoadImage(CPaintManagerUI::GetInstance(), MAKEINTRESOURCE(IDI_ICON_WINGIRL), IMAGE_ICON, ::GetSystemMetrics(SM_CXSMICON), ::GetSystemMetrics(SM_CYSMICON), LR_DEFAULTCOLOR);
+	ASSERT(hIcon);
+	::SendMessage(m_hWnd, WM_SETICON, (WPARAM) FALSE, (LPARAM) hIcon);
 }
 
 void PyFrameUI::Notify(TNotifyUI& msg)
