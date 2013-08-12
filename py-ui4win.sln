@@ -84,8 +84,8 @@ Global
 		{48A20CD3-224A-49CC-8844-CDEC40AE03E6}.Debug|Win32.ActiveCfg = Debug|Win32
 		{48A20CD3-224A-49CC-8844-CDEC40AE03E6}.Debug|Win32.Build.0 = Debug|Win32
 		{48A20CD3-224A-49CC-8844-CDEC40AE03E6}.Debug|x64.ActiveCfg = Debug|Win32
-		{48A20CD3-224A-49CC-8844-CDEC40AE03E6}.Release_Extend|Win32.ActiveCfg = Release|Win32
-		{48A20CD3-224A-49CC-8844-CDEC40AE03E6}.Release_Extend|Win32.Build.0 = Release|Win32
+		{48A20CD3-224A-49CC-8844-CDEC40AE03E6}.Release_Extend|Win32.ActiveCfg = Release_Launcher|Win32
+		{48A20CD3-224A-49CC-8844-CDEC40AE03E6}.Release_Extend|Win32.Build.0 = Release_Launcher|Win32
 		{48A20CD3-224A-49CC-8844-CDEC40AE03E6}.Release_Extend|x64.ActiveCfg = Release|Win32
 		{48A20CD3-224A-49CC-8844-CDEC40AE03E6}.Release_Launcher|Win32.ActiveCfg = Release_Launcher|Win32
 		{48A20CD3-224A-49CC-8844-CDEC40AE03E6}.Release_Launcher|Win32.Build.0 = Release_Launcher|Win32
