@@ -7,7 +7,9 @@ typedef DWORD ZRESULT;
 #define CloseZip(hz) CloseZipU(hz)
 extern HZIP OpenZipU(void *z,unsigned int len,DWORD flags);
 extern ZRESULT CloseZipU(HZIP hz);
+#ifdef PYTHON_DUILIB
 extern "C" void SwitchToOtherPythonTread();
+#endif
 namespace DuiLib {
 
 /////////////////////////////////////////////////////////////////////////////////////
