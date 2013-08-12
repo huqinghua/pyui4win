@@ -74,6 +74,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				LinkIncremental="2"
+				AdditionalLibraryDirectories="..\libs;..\libs\python; ..\Lib"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="1"
@@ -156,6 +157,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				LinkIncremental="1"
+				AdditionalLibraryDirectories="..\libs;..\libs\python; ..\Lib"
 				SubSystem="2"
 				TargetMachine="1"
 			/>
@@ -242,7 +244,7 @@
 				AdditionalDependencies="libboost_python-vc90-mt-sgd-1_53.lib lua51.lib"
 				OutputFile="../bin/Launcher.exe"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="..\libs\python; ..\Lib"
+				AdditionalLibraryDirectories="..\libs;..\libs\python; ..\Lib"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="1"
@@ -328,7 +330,7 @@
 				AdditionalDependencies="libboost_python-vc90-mt-s-1_53.lib lua51.lib"
 				OutputFile="../bin/Launcher.exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="..\libs\python; ..\Lib"
+				AdditionalLibraryDirectories="..\libs;..\libs\python; ..\Lib"
 				SubSystem="2"
 				TargetMachine="1"
 			/>
