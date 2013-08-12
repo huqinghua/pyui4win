@@ -1232,22 +1232,25 @@ void CPaintManagerUI::MessageLoop()
 void CPaintManagerUI::MessageLoop()
 {
 	MSG msg = { 0 };
-	while( ::GetMessage(&msg, NULL, 0, 0) ) {
-		if( !CPaintManagerUI::TranslateMessage(&msg) ) {
-			::TranslateMessage(&msg);
-			try{
-				::DispatchMessage(&msg);
-			} catch(...) {
-				DUITRACE(_T("EXCEPTION: %s(%d)\n"), __FILET__, __LINE__);
+	while ( TRUE ) {
+		if (::PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE)) {
+			if ( ::GetMessage(&msg, NULL, 0, 0) ) {
+				if( msg.message == WM_QUIT ) break;
+				if( !CPaintManagerUI::TranslateMessage(&msg) ) {
+					::TranslateMessage(&msg);
+					try{
+						::DispatchMessage(&msg);
+					} catch(...) {
+						DUITRACE(_T("EXCEPTION: %s(%d)\n"), __FILET__, __LINE__);
 #ifdef _DEBUG
-				throw "CPaintManagerUI::MessageLoop";
+						throw "CPaintManagerUI::MessageLoop";
 #endif
+					}
+				}
 			}
 		}
 		else
-		{
 			SwitchToOtherPythonTread();
-		}
 	}
 }
 #endif
