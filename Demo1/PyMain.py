@@ -1057,7 +1057,7 @@ class MainFrame(PyFrameBase):
 def PyAppInit():
     CommonUtils.SaveExePath()
     pyFrameObj = PyFrameCreator()
-    obj = pyFrameObj.CreateForm(0, 'PyMain', 'MainFrame', 'Python Dui界面开发示例')
+    obj = pyFrameObj.CreateDialog(0, 'PyMain', 'MainFrame', 'Python Dui界面开发示例')
     obj.TestObj('msg changed')
     pyFrameObj.ShowModal()
 

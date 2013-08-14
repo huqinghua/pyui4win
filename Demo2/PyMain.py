@@ -114,6 +114,5 @@ def PyAppInit():
     obj = pyFrameObj.CreateForm(0, 'PyMain', 'MainFrame', 'Python Dui界面开发示例')
     pyFrameObj.Show()
     CPaintManagerUI.MessageLoop()
-    #pyFrameObj.Show()
 
 

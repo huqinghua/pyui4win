@@ -228,7 +228,9 @@ public:
 	~PyFrameCreator();
 
 public:
-	object CreateForm(ULONG hParent, LPCSTR pyModule, LPCSTR pyClassName, LPCSTR pyFormCaption);
+	object PyCreateDialog(ULONG hParent, LPCSTR pyModule, LPCSTR pyClassName, LPCSTR pyFormCaption);
+	object PyCreateWindow(ULONG hParent, LPCSTR pyModule, LPCSTR pyClassName, LPCSTR pyFormCaption, DWORD dwStyle, DWORD dwExStyle);
+	object PyCreateForm(ULONG hParent, LPCSTR pyModule, LPCSTR pyClassName, LPCSTR pyFormCaption);
 	void Show();
 	UINT ShowModal();
 

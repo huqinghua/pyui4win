@@ -469,7 +469,9 @@ BOOST_PYTHON_MODULE(PyUI)
 		;
 
 	class_<PyFrameCreator>("PyFrameCreator")
-		.def("CreateForm", &PyFrameCreator::CreateForm)
+		.def("CreateWindow", &PyFrameCreator::PyCreateWindow)
+		.def("CreateForm", &PyFrameCreator::PyCreateForm)
+		.def("CreateDialog", &PyFrameCreator::PyCreateDialog)
 		.def("ShowModal", &PyFrameCreator::ShowModal)
 		.def("Show", &PyFrameCreator::Show)
 		; 
