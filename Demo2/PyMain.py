@@ -28,25 +28,25 @@ class MainFrame(PyFrameBase):
 
     #virtual void OnPrepare(LPCSTR sendor, WPARAM wParam, LPARAM lParam);
     def OnPrepare(self, sendor, wParam, lParam):
-        self.minbtn = self.PyFindButton("minbtn")
         self.maxbtn = self.PyFindButton("maxbtn")
+        self.restorebtn = self.PyFindButton("restorebtn")
         self.closebtn = self.PyFindButton("closebtn")
-        self.OU_genPwd = self.PyFindOption("OU_forward")
-        self.OU_genPwd1 = self.PyFindOption("OU_genPwd1")
-        self.OU_genPwd2 = self.PyFindOption("OU_genPwd2")
+        self.OU_home = self.PyFindOption("OU_home")
+        self.OU_back = self.PyFindOption("OU_back")
+        self.OU_forward = self.PyFindOption("OU_forward")
         self.OU_genPwd3 = self.PyFindOption("OU_genPwd3")
         self.OU_genPwd4 = self.PyFindOption("OU_genPwd4")
         self.OU_genPwd5 = self.PyFindOption("OU_genPwd5")
         self.OU_genPwd6 = self.PyFindOption("OU_genPwd6")
-        self.OU_genPwd7 = self.PyFindOption("OU_genPwd7")
-        self.OU_genPwd8 = self.PyFindOption("OU_genPwd8")
+        self.OU_enableProxy = self.PyFindOption("OU_enableProxy")
+        self.OU_disableProxy = self.PyFindOption("OU_disableProxy")
         self.OU_google = self.PyFindOption("OU_google")
         self.OU_facebook = self.PyFindOption("OU_facebook")
         self.OU_twitter = self.PyFindOption("OU_twitter")
         self.OU_youtube = self.PyFindOption("OU_youtube")
-        self.OU_genPwdsub4 = self.PyFindOption("OU_genPwdsub4")
-        self.OU_genPwdsub5 = self.PyFindOption("OU_genPwdsub5")
-        self.OU_genPwdsub6 = self.PyFindOption("OU_genPwdsub6")
+        self.OU_osc = self.PyFindOption("OU_osc")
+        self.OU_yahoo = self.PyFindOption("OU_yahoo")
+        self.OU_github = self.PyFindOption("OU_github")
         self.OU_genPwdsub7 = self.PyFindOption("OU_genPwdsub7")
         self.HLU_caption = self.PyFindHorizontalLayout("HLU_caption")
         self.VLU_compile = self.PyFindVerticalLayout("VLU_compile")
@@ -55,8 +55,10 @@ class MainFrame(PyFrameBase):
         self.TLU_subFun = self.PyFindTabLayout("TLU_subFun")
         self.TLU_client1 = self.PyFindTabLayout("TLU_client1")
         self.ie = self.PyFindWebBrowser("ie")
-        
+
         PyWinUtils().SetConnectionOptions("127.0.0.1:8087")
+        self.OU_enableProxy.Selected(True)
+
         
     def OnExit(self):
         self.ExitApp()
@@ -75,7 +77,9 @@ class MainFrame(PyFrameBase):
                 PyWinUtils().DisableConnectionProxy()
             elif sendor == "OU_enableProxy":
                 PyWinUtils().SetConnectionOptions("127.0.0.1:8087")
-            elif sendor == "OU_google":                
+            elif sendor == "OU_google":
+                MessageBox111 = ctypes.windll.user32.MessageBoxA
+                MessageBox111(None, 'Hello', 'Window title', 0)
                 self.import_ca()
                 self.ie.NavigateUrl('www.google.com.hk')
             elif sendor == "OU_facebook":
@@ -83,7 +87,16 @@ class MainFrame(PyFrameBase):
             elif sendor == "OU_twitter":
                 self.ie.NavigateUrl('www.twitter.com')
             elif sendor == "OU_youtube":
-                self.ie.NavigateUrl('www.youtube.com')                
+                self.ie.NavigateUrl('www.youtube.com')
+            elif sendor == "OU_osc":
+                self.ie.NavigateUrl('www.oschina.net')
+            elif sendor == "OU_yahoo":
+                self.ie.NavigateUrl('www.yahoo.com')
+            elif sendor == "OU_github":
+                self.ie.NavigateUrl('github.com')
+
+    def test_ui(self):
+        pass
 
     def import_ca(self):
         certfile = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'CA.crt')

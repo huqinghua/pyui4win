@@ -1288,6 +1288,7 @@ void CUIDesignerView::OnGenerateCode()
 	catch(boost::python::error_already_set const &)
 	{  
 		std::string err = parse_python_exception();
+		MessageBox(CString(CStringA(err.c_str())), _T("ÌבÊ¾"), MB_ICONERROR);
 		PyLog().LogText(err.c_str());
 		PyErr_Clear();
 	}  

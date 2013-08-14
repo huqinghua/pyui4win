@@ -69,12 +69,14 @@ class GenerateCode():
                     prepare_code += '        self.%s = self.PyFind%s("%s")'%(elem.attrib['name'], ctltag, elem.attrib['name']) + os.linesep
                     # DUI_MSGTYPE_CLICK
                     if ctltag in ['Button', 'Option', 'CheckBox']:
-                        click_code += '            if sendor == "%s":'%elem.attrib['name'] + os.linesep
+                        click_code += '            elif sendor == "%s":'%elem.attrib['name'] + os.linesep
                         click_code += '                pass' + os.linesep
                     # DUI_MSGTYPE_ITEMSELECT
                     if ctltag in ['Combo', 'List']:
-                        itemselect_code += '            if sendor == "%s":'%elem.attrib['name'] + os.linesep
+                        itemselect_code += '            elif sendor == "%s":'%elem.attrib['name'] + os.linesep
                         itemselect_code += '                pass' + os.linesep
+        click_code.replace('elif', 'if', 1)
+        itemselect_code.replace('elif', 'if', 1)
 
         # 组合代码
         self.code = codeTemplate.format(\
@@ -89,6 +91,9 @@ class GenerateCode():
         outfile.write(self.code)
         outfile.close()
 
+        #打开文件
+        shell32 = ctypes.windll.LoadLibrary("shell32.dll");
+        shell32.ShellExecuteA(None,'open', 'notepad',skinXmlPath.replace('.xml','.py'),'',1);
         return 0
 
 def GeneratePythonCode( skinXmlPath):

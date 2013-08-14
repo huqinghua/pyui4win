@@ -72,7 +72,7 @@
 				AdditionalDependencies="boost_python-vc90-mt-gd-1_53.lib lua51.lib"
 				OutputFile="..\bin\DuiDesigner_d.exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="..\libs\python; ..\Lib"
+				AdditionalLibraryDirectories="..\libs;..\libs\python; ..\Lib"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\$(ConfigurationName)\$(TargetName).pdb"
 				SubSystem="2"
@@ -158,7 +158,7 @@
 				AdditionalDependencies="boost_python-vc90-mt-1_53.lib lua51.lib"
 				OutputFile="..\bin\DuiDesigner.exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="..\libs\python; ..\Lib"
+				AdditionalLibraryDirectories="..\libs;..\libs\python; ..\Lib"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\$(ConfigurationName)\$(TargetName).pdb"
 				SubSystem="2"
@@ -630,11 +630,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\res\ToolBox\icon1.ico"
+				RelativePath=".\res\icon1.ico"
 				>
 			</File>
 			<File
-				RelativePath=".\res\icon1.ico"
+				RelativePath=".\res\ToolBox\icon1.ico"
 				>
 			</File>
 			<File

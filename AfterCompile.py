@@ -13,18 +13,16 @@ import ctypes
 
 
 if __name__ == "__main__":
+    files = [r'.\bin\_PyDui4Win.exe', r'.\bin\Launcher.exe', r'.\bin\_PyDui4Win.pyd']
+    dests = [r".\Demo1\\", r".\Demo2\\"]
     try:
-        if os.path.isfile(r".\bin\_PyDui4Win.exe"):
-            shutil.copyfile(r".\bin\_PyDui4Win.exe", r".\Demo1\_PyDui4Win.exe")
-            shutil.copyfile(r".\bin\_PyDui4Win.exe", r".\Demo2\_PyDui4Win.exe")
-        if os.path.isfile(r".\bin\Launcher.exe"):
-            shutil.copyfile(r".\bin\Launcher.exe", r".\Demo1\Launcher.exe")
-            shutil.copyfile(r".\bin\Launcher.exe", r".\Demo2\Launcher.exe")
-        if os.path.isfile(r".\bin\_PyDui4Win.pyd"):
-            shutil.copyfile(r".\bin\_PyDui4Win.pyd", r".\Demo1\_PyDui4Win.pyd")
-            shutil.copyfile(r".\bin\_PyDui4Win.pyd", r".\Demo2\_PyDui4Win.pyd")
-        ctypes.windll.user32.MessageBoxW(None, u'拷贝文件成功', u'OK', 0)
+        for file in files:
+            for dest in dests:
+                dirname, basename = os.path.split(file)
+                if os.path.isfile(file):
+                    shutil.copyfile(file, dest + basename)
+        ctypes.windll.user32.MessageBoxA(None, '拷贝文件成功', 'OK', 0)
     except Exception, e:
-        error = u'拷贝文件出错'
-        ctypes.windll.user32.MessageBoxW(None, error, u'错误', 0)
+        error = '%s'%e
+        ctypes.windll.user32.MessageBoxA(None, error, '错误', 0)
 
