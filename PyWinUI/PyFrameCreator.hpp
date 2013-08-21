@@ -44,6 +44,7 @@ public:
 	static CEditUI* CreateEditUI(){return new CEditUI();}
 	static CProgressUI* CreateProgressUI(){return new CProgressUI();}
 	static CAnimationUI* CreateAnimationUI(){return new CAnimationUI();}
+	static CContainerUI* CreateContainerUI(){return new CContainerUI();}
 	static CTabLayoutUI* CreateTabLayoutUI(){return new CTabLayoutUI();}
 	static CHorizontalLayoutUI* CreateHorizontalLayoutUI(){return new CHorizontalLayoutUI();}
 	static CVerticalLayoutUI* CreateVerticalLayoutUI(){return new CVerticalLayoutUI();}
@@ -65,6 +66,7 @@ public:
 	static CEditUI* castEditUI(CControlUI* control){return static_cast<CEditUI*>(control);}
 	static CProgressUI* castProgressUI(CControlUI* control){return static_cast<CProgressUI*>(control);}
 	static CAnimationUI* castAnimationUI(CControlUI* control){return static_cast<CAnimationUI*>(control);}
+	static CContainerUI* castContainerUI(CControlUI* control){return static_cast<CContainerUI*>(control);}
 	static CTabLayoutUI* castTabLayoutUI(CControlUI* control){return static_cast<CTabLayoutUI*>(control);}
 	static CHorizontalLayoutUI* castHorizontalLayoutUI(CControlUI* control){return static_cast<CHorizontalLayoutUI*>(control);}
 	static CVerticalLayoutUI* castVerticalLayoutUI(CControlUI* control){return static_cast<CVerticalLayoutUI*>(control);}
@@ -134,6 +136,7 @@ struct PyUIBaseWrap : PyUIBase, wrapper<PyUIBase>
 	virtual CRichEditUI* FindRichEditUI(LPCSTR ControlName) { return (CRichEditUI*)this->PyUIBase::FindControl(ControlName); }
 	virtual CProgressUI* FindProgressUI(LPCSTR ControlName) { return (CProgressUI*)this->PyUIBase::FindControl(ControlName); }
 	virtual CAnimationUI* FindAnimationUI(LPCSTR ControlName) { return (CAnimationUI*)this->PyUIBase::FindControl(ControlName); }
+	virtual CContainerUI* FindContainerUI(LPCSTR ControlName) { return (CContainerUI*)this->PyUIBase::FindControl(ControlName); }
 	virtual CTabLayoutUI* FindTabLayoutUI(LPCSTR ControlName) { return (CTabLayoutUI*)this->PyUIBase::FindControl(ControlName); }
 	virtual CHorizontalLayoutUI* FindHorizontalLayoutUI(LPCSTR ControlName) { return (CHorizontalLayoutUI*)this->PyUIBase::FindControl(ControlName); }
 	virtual CVerticalLayoutUI* FindVerticalLayoutUI(LPCSTR ControlName) { return (CVerticalLayoutUI*)this->PyUIBase::FindControl(ControlName); }

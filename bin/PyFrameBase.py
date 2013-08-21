@@ -59,6 +59,8 @@ class PyFrameBase(PyUIBase):
         return PyProgressUI(PyUIFactory.CreatProgressUI())
     def PyCreateAnimation(self):
         return PyAnimationUI(PyUIFactory.CreateAnimationUI())
+    def PyCreateContainer(self):
+        return PyContainerUI(PyUIFactory.CreateContainerUI())
     def PyCreateHorizontalLayout(self):
         return PyHorizontalLayoutUI(PyUIFactory.CreateHorizontalLayoutUI())
     def PyCreateVerticalLayout(self):
@@ -94,6 +96,8 @@ class PyFrameBase(PyUIBase):
         return PyAnimationUI(self.FindAnimationUI(controlName))
     def PyFindHorizontalLayout(self, controlName):
         return PyHorizontalLayoutUI(self.FindHorizontalLayoutUI(controlName))
+    def PyFindContainer(self, controlName):
+        return PyContainerUI(self.FindContainerUI(controlName))
     def PyFindVerticalLayout(self, controlName):
         return PyVerticalLayoutUI(self.FindVerticalLayoutUI(controlName))
     def PyFindTabLayout(self, controlName):
@@ -125,6 +129,8 @@ class PyFrameBase(PyUIBase):
         return PyProgressUI(PyUICast.castProgressUI(control))
     def PyCast2Animation(self, control):
         return PyAnimationUI(PyUICast.castAnimationUI(control))
+    def PyCast2Container(self, control):
+        return PyContainerUI(PyUICast.castContainerUI(control))
     def PyCast2HorizontalLayout(self, control):
         return PyHorizontalLayoutUI(PyUICast.castHorizontalLayoutUI(control))
     def PyCast2VerticalLayout(self, control):

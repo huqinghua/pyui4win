@@ -59,8 +59,8 @@ class MainFrame(PyFrameBase):
         PyWinUtils().SetConnectionOptions("127.0.0.1:8087")
         self.OU_enableProxy.Selected(True)
 
-        
-    def OnExit(self):
+
+    def OnExit(self, sendor, wParam, lParam):
         self.ExitApp()
         
     #virtual void OnNotify(LPCSTR sendor, LPCSTR sType, WPARAM wParam, LPARAM lParam);
@@ -78,9 +78,10 @@ class MainFrame(PyFrameBase):
             elif sendor == "OU_enableProxy":
                 PyWinUtils().SetConnectionOptions("127.0.0.1:8087")
             elif sendor == "OU_google":
-                MessageBox111 = ctypes.windll.user32.MessageBoxA
-                MessageBox111(None, 'Hello', 'Window title', 0)
-                self.import_ca()
+                #为什么以下2句运行就挂？
+#                MessageBox111 = ctypes.windll.user32.MessageBoxA
+#                MessageBox111(None, 'Hello', 'Window title', 0)
+                #self.import_ca()
                 self.ie.NavigateUrl('www.google.com.hk')
             elif sendor == "OU_facebook":
                 self.ie.NavigateUrl('www.facebook.com')
@@ -124,7 +125,7 @@ class MainFrame(PyFrameBase):
 def PyAppInit():
     CommonUtils.SaveExePath()
     pyFrameObj = PyFrameCreator()
-    obj = pyFrameObj.CreateForm(0, 'PyMain', 'MainFrame', 'Python Dui界面开发示例')
+    obj = pyFrameObj.CreateForm(0, 'PyMain', 'MainFrame', 'pyui4win')
     pyFrameObj.Show()
     CPaintManagerUI.MessageLoop()
 
