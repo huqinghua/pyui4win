@@ -31,17 +31,27 @@ class {CLASS_NAME}(PyFrameBase):
         self.clsName = self.__class__.__name__
         self.skinFileName = self.__class__.__name__ + '.xml'
 
+    # 不要改动
     def GetSkinFile(self):
         return self.skinFileName
 
+    # 不要改动
     def GetWindowClassName(self):
         return self.clsName
 
+    # 退出处理
+    def OnExit(self, sendor, wParam, lParam):
+        self.ExitApp()
+
+    # 准备显示前的处理
     def OnPrepare(self, sendor, wParam, lParam):
 {ON_PREPARE}
+    # 界面事件处理
     def OnNotify(self, sendor, sType, wParam, lParam):
+        # 用户点击事件
         if sType == DUI_MSGTYPE_CLICK:
 {ON_CLICK}
+        # 用户选择事件
         if sType == DUI_MSGTYPE_ITEMSELECT:
 {ON_ITEMSELECT}
 """
@@ -64,20 +74,27 @@ class {CLASS_NAME}(PyFrameBase):
         self.clsName = self.__class__.__name__
         self.skinFileName = self.__class__.__name__ + '.xml'
 
+    # 不要改动
     def GetSkinFile(self):
         return self.skinFileName
 
+    # 不要改动
     def GetWindowClassName(self):
         return self.clsName
 
+    # 退出处理
     def OnExit(self, sendor, wParam, lParam):
         self.ExitApp()
 
+    # 准备显示前的处理
     def OnPrepare(self, sendor, wParam, lParam):
 {ON_PREPARE}
+    # 界面事件处理
     def OnNotify(self, sendor, sType, wParam, lParam):
+        # 用户点击事件
         if sType == DUI_MSGTYPE_CLICK:
 {ON_CLICK}
+        # 用户选择事件
         if sType == DUI_MSGTYPE_ITEMSELECT:
 {ON_ITEMSELECT}
 
