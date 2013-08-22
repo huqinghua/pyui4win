@@ -1,5 +1,5 @@
 __author__ = 'hqh'
-# coding=gbk
+
 
 import string, time
 from PyUI import *
@@ -53,6 +53,8 @@ class PyControlUI():
         return self.pControl.NeedUpdate()
     def NeedParentUpdate(self):
         return self.pControl.NeedParentUpdate()
+    def SetBkImage(self, img):
+        return self.pControl.SetBkImage(img)
 
 class PyContainerUI(PyControlUI):
     def __init__(self, pControl):
