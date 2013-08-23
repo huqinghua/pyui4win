@@ -580,18 +580,15 @@ END
 
 IDD_ABOUTBOX DIALOGEX 0, 0, 231, 174
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "关于 Python User Interface Designer For Win32"
+CAPTION "关于 pyui4win designer"
 FONT 9, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
     CONTROL         346,IDC_STATIC,"Static",SS_BITMAP,7,7,73,73
-    LTEXT           "Python User Interface Designer For Win32",IDC_STATIC,7,85,140,8,SS_NOPREFIX
-    LTEXT           "贡献者:  踏雪流云, achellies,Thinker,Daviyang35",IDC_STATIC,7,133,205,8
+    LTEXT           "pyui4win designer",IDC_STATIC,7,85,140,8,SS_NOPREFIX
     DEFPUSHBUTTON   "确定",IDOK,174,153,50,14,WS_GROUP
     LTEXT           "版本号",IDC_STATIC_CURRENT_VERSION,7,95,192,8
-    LTEXT           "作者:  编码的风景",IDC_STATIC,7,108,56,8
-    LTEXT           "博客: ",IDC_STATIC,7,119,19,8
-    PUSHBUTTON      "http://blog.csdn.net/cryptsoft/",IDC_BUTTON_MY_BLOG_LINK,27,117,112,14
-    PUSHBUTTON      "http://code.google.com/p/py-ui4win/",IDC_BUTTON_DUILIB_LINK,7,153,131,14
+    LTEXT           "官方网站: ",IDC_STATIC,7,119,19,8
+    PUSHBUTTON      "http://www.xiaoniuhui.com",IDC_BUTTON_MY_BLOG_LINK,27,117,112,14
 END
 
 IDD_DIALOG_IMAGE DIALOGEX 0, 0, 316, 250
@@ -728,7 +725,7 @@ CAPTION "检查更新"
 FONT 9, "MS Shell Dlg", 0, 0, 0x0
 BEGIN
     DEFPUSHBUTTON   "确定",IDOK,65,77,50,14
-    LTEXT           "正在检查是否有更新版本的UIDesigner...",IDC_STATIC,7,7,124,8
+    LTEXT           "正在检查是否有更新版本的pyui4win designer...",IDC_STATIC,7,7,124,8
     LTEXT           "当前版本号",IDC_STATIC_CURRENT_VERSION,45,20,129,8
     LTEXT           "最新版本号",IDC_STATIC_LATEST_VERSION,45,33,129,8
     LTEXT           "您的版本是:",IDC_STATIC,7,20,38,8

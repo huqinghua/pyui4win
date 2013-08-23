@@ -177,7 +177,7 @@ BOOL CUIDesignerApp::InitInstance()
 		return FALSE;
 	}
 	m_pMainWnd = pMainFrame;
-	m_pMainWnd->SetWindowText(_T("Python User Interface Designer For Win32"));
+	m_pMainWnd->SetWindowText(_T("pyui4win designer"));
 	// 仅当具有后缀时才调用 DragAcceptFiles
 	//  在 MDI 应用程序中，这应在设置 m_pMainWnd 之后立即发生
 	// 启用拖/放
@@ -216,7 +216,6 @@ public:
 	virtual BOOL OnInitDialog();
 private:
 	CMFCLinkCtrl m_btnMyBlogURL;
-	CMFCLinkCtrl m_btnDuiLibURL;
 };
 
 CAboutDlg::CAboutDlg() : CDialog(CAboutDlg::IDD)
@@ -227,7 +226,6 @@ void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_BUTTON_MY_BLOG_LINK, m_btnMyBlogURL);
-	DDX_Control(pDX, IDC_BUTTON_DUILIB_LINK, m_btnDuiLibURL);
 }
 
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialog)
@@ -239,12 +237,9 @@ BOOL CAboutDlg::OnInitDialog()
 
 	// TODO:  在此添加额外的初始化
 	this->GetDlgItem(IDC_STATIC_CURRENT_VERSION)->SetWindowText(UIDESIGNER_VERSION);
-	m_btnMyBlogURL.SetURL(_T("http://blog.csdn.net/cryptsoft"));
-	m_btnMyBlogURL.SetTooltip(_T("编码的风景的博客"));
+	m_btnMyBlogURL.SetURL(_T("http://www.xiaoniuhui.com"));
+	m_btnMyBlogURL.SetTooltip(_T("官方网站"));
 	m_btnMyBlogURL.SizeToContent();
-	m_btnDuiLibURL.SetURL(_T("http://code.google.com/p/py-ui4win/"));
-	m_btnDuiLibURL.SetTooltip(_T("py-ui4win开源项目"));
-	m_btnDuiLibURL.SizeToContent();
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 	// 异常: OCX 属性页应返回 FALSE
