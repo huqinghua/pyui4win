@@ -61,6 +61,9 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 		PyRun_SimpleString(
 			(std::string("if not '") + (LPCSTR)pathA + "' in sys.path: \n"
 			"    sys.path.append('" + (LPCSTR)pathA + "')\n").c_str());
+		PyRun_SimpleString(
+			(std::string("if not '") + (LPCSTR)pathA + "\\PyModule' in sys.path: \n"
+			"    sys.path.append('" + (LPCSTR)pathA + "\\PyModule')\n").c_str());
 	}
 	catch(boost::python::error_already_set const &)
 	{  
