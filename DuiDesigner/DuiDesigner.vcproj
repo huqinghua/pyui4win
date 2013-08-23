@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="DuiDesigner"
+	Name="Pyui4win Designer"
 	ProjectGUID="{8CC28A8B-CD88-44A7-8994-066CCD8938CB}"
 	RootNamespace="DuiDesigner"
 	Keyword="MFCProj"
@@ -70,7 +70,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="boost_python-vc90-mt-gd-1_53.lib lua51.lib"
-				OutputFile="..\bin\DuiDesigner_d.exe"
+				OutputFile="..\bin\Pyui4win Designer_d.exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\libs;..\libs\python; ..\Lib"
 				GenerateDebugInformation="true"
@@ -156,7 +156,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="boost_python-vc90-mt-1_53.lib lua51.lib"
-				OutputFile="..\bin\DuiDesigner.exe"
+				OutputFile="..\bin\Pyui4win Designer.exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\libs;..\libs\python; ..\Lib"
 				GenerateDebugInformation="true"
@@ -630,11 +630,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\res\icon1.ico"
+				RelativePath=".\res\ToolBox\icon1.ico"
 				>
 			</File>
 			<File
-				RelativePath=".\res\ToolBox\icon1.ico"
+				RelativePath=".\res\icon1.ico"
 				>
 			</File>
 			<File
