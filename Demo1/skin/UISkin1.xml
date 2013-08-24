@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<Window size="678,633">
-    <TileLayout width="678" height="633">
-        <Container width="203" height="633" />
-        <Container width="264" height="633" />
-    </TileLayout>
-</Window>

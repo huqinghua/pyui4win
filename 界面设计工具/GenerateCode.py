@@ -85,10 +85,7 @@ class GenerateCode():
         itemselect_code = itemselect_code.replace('elif', 'if', 1)
 
         # 组合代码
-        if os.path.basename(skinXmlPath) == 'MainFrame.xml':
-            self.saveFile = os.path.dirname(skinXmlPath) + '\\' + 'PyMain.py' # 要保持为PyMain.py文件
-        else:
-            self.saveFile = skinXmlPath.replace('.xml','.py')
+        self.saveFile = skinXmlPath.replace('.xml','.py')
 
         self.codeTemp = codeTemplate.replace('\n', '\r\n')
         self.code = self.codeTemp.format(\
