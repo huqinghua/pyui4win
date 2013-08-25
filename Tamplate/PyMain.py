@@ -14,3 +14,6 @@ def PyAppInit():
     obj = pyFrameObj.CreateForm(0, 'MainFrame', 'MainFrame', 'pyui4win界面示例')
     pyFrameObj.Show()
     CPaintManagerUI.MessageLoop()
+    #模态对话框
+    #obj = pyFrameObj.CreateDialog(0, 'MainFrame', 'MainFrame', 'pyui4win界面示例')
+    #pyFrameObj.ShowModal()
