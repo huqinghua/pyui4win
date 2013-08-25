@@ -154,6 +154,11 @@ int CWin32Api::SetTimer(int hWnd, int nIDEvent, int uElapse)
 	return ::SetTimer((HWND)hWnd, nIDEvent, uElapse, NULL);
 }
 
+int CWin32Api::KillTimer(int hWnd, int nIDEvent)
+{
+	return ::KillTimer((HWND)hWnd, nIDEvent);
+}
+
 BOOL CWin32Api::SetConnectionOptions(LPTSTR proxy_full_addr)
 {
 /*

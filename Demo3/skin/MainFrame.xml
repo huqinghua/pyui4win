@@ -10,7 +10,7 @@
             <Label name="LabelUI6" text="小妞会装机" float="true" pos="63,18,0,0" width="279" height="23" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" font="1" />
             <Label name="LabelUI4" float="true" pos="10,7,0,0" width="48" height="48" bkimage="xiaoniu48.png" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
         </Container>
-        <Container name="ContainerUIStep2" width="1023" height="291">
+        <Container name="ContainerUIStep2" width="1023" height="291" visible="false">
             <Label name="LabelUIOS" float="true" pos="416,50,0,0" width="182" height="137" bkimage="file=&apos;win7.jpg&apos; hole=&apos;true&apos;" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
             <Progress name="ProgressDownload" float="true" pos="195,220,0,0" width="603" height="33" bordersize="1" bordercolor="#00008000" focusbordercolor="#000000FF" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" foreimage="progress.png" min="0" max="100" value="20" hor="true" />
             <Label name="LabelWaiting" text="已经下载20%, 请耐心等待..." float="true" pos="416,221,0,0" width="373" height="30" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
@@ -23,7 +23,7 @@
             <Label name="LabelUI2" text="XP: 流行了10年的经典系统" float="true" pos="262,30,0,0" width="181" height="27" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" font="2" />
             <Label name="LabelUI3" text="Win 7: 更炫的新系统" float="true" pos="589,30,0,0" width="269" height="30" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" font="2" />
         </Container>
-        <Container name="ContainerUIStep3" width="1023" height="291">
+        <Container name="ContainerUIStep3" width="1023" height="291" visible="false">
             <Label name="LabelUI12" float="true" pos="366,2,0,0" width="256" height="256" bkimage="Vista.png" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
             <Label name="LabelUI11" text="下载已经完成。按开始安装按钮开始安装。安装过程中会自动重启动计算机。" float="true" pos="139,245,0,0" width="662" height="24" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" font="2" />
         </Container>

@@ -12,6 +12,7 @@ public:
 	void SetWaitCursor();
 	void Sleep(int nMillseconds);
 	int SetTimer(int hWnd, int nIDEvent, int uElapse); 
+	int KillTimer(int hWnd, int nIDEvent);
 	void SetArrowCursor();
 	void ShellExcute(int hwnd,
 		std::string lpOperation,

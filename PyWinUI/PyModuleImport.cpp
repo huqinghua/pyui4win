@@ -469,6 +469,7 @@ BOOST_PYTHON_MODULE(PyUI)
 		.def("CreateDirectory", &CWin32Api::CreateDirectory)
 		.def("Sleep", &CWin32Api::Sleep)
 		.def("SetTimer", &CWin32Api::SetTimer)
+		.def("KillTimer", &CWin32Api::KillTimer)
 		.def("SetConnectionOptions", &CWin32Api::SetConnectionOptions)
 		.def("DisableConnectionProxy", &CWin32Api::DisableConnectionProxy)
 		;

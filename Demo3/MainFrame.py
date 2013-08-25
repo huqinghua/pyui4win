@@ -8,11 +8,15 @@ from PyFrameBase import *
 import UICommon
 from CommonUtil import CommonUtils
 
+XP = 1
+WIN7 = 2
 class MainFrame(PyFrameBase):
     def __init__(self):
         super(MainFrame, self).__init__()
         self.clsName = self.__class__.__name__
         self.skinFileName = self.__class__.__name__ + '.xml'
+        self.progress = 0
+        self.os = 0
 
     def GetSkinFile(self):
         return self.skinFileName
@@ -55,22 +59,47 @@ class MainFrame(PyFrameBase):
         self.ContainerUIStep2.SetVisible(False)
         self.ContainerUIStep3.SetVisible(False)
 
+    def OnCustomTimer(self, wParam, lParam):
+        if wParam == 2:
+            self.progress = self.progress + 1
+            if self.progress >= 100:
+                if self.os == WIN7:
+                    self.LabelUIDescription.SetText('已经准备好安装 Win7 系统到您的计算机')
+                else:
+                    self.LabelUIDescription.SetText('已经准备好安装 XP 系统到您的计算机')
+                self.ButtonUIReboot.SetVisible(True)
+                self.ContainerUIStep1.SetVisible(False)
+                self.ContainerUIStep2.SetVisible(False)
+                self.ContainerUIStep3.SetVisible(True)
+                PyWinUtils().KillTimer(self.GetHWnd(), 2)
+            else:
+                self.ProgressDownload.SetValue(self.progress)
+                self.LabelWaiting.SetText('正在下载，请耐心等待(%d/100)' % self.progress)
+        pass
+
     def OnNotify(self, sendor, sType, wParam, lParam):
         if sType == DUI_MSGTYPE_CLICK:
-            if sendor == "closebtn":
-                pass
-            elif sendor == "BtnDownloadTooSlow":
-                pass
+            if sendor == "BtnDownloadTooSlow":
+                PyWinUtils().ShellExcute(0, 'open', 'http://www.xiaoniuhui.com/index.php#!/%E5%B0%8F%E5%A6%9E%E4%BC%9A%E8%A3%85%E6%9C%BA', '', '', 1)
             elif sendor == "BtnWin7" or sendor == "BtnXP":
-                self.LabelUIOS.SetBkImage('win7.jpg') if sendor == "BtnWin7" else self.LabelUIOS.SetBkImage('xp.jpg')
+                if sendor == "BtnWin7":
+                    self.os = WIN7
+                    self.LabelUIOS.SetBkImage('win7.jpg')
+                    self.LabelUIDescription.SetText('正在下载 Win7 系统到您的计算机...')
+                else:
+                    self.os = XP
+                    self.LabelUIOS.SetBkImage('xp.jpg')
+                    self.LabelUIDescription.SetText('正在下载 XP 系统到您的计算机...')
                 self.ProgressDownload.SetMaxValue(100)
-                self.ProgressDownload.SetValue(0)
+                self.progress
+                self.ProgressDownload.SetValue(self.progress)
                 self.LabelWaiting.SetText('开始下载，请耐心等待')
 
                 self.ContainerUIStep1.SetVisible(False)
                 self.ContainerUIStep2.SetVisible(True)
                 self.ContainerUIStep3.SetVisible(False)
-                pass
+
+                PyWinUtils().SetTimer(self.GetHWnd(), 2, 1000)
             elif sendor == "ButtonUIReboot":
                 pass
             elif sendor == "adv1":
