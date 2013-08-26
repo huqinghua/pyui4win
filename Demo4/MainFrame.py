@@ -78,8 +78,10 @@ class MainFrame(PyFrameBase):
                 pass
             elif sendor == "btnOpenLog":
                 if os.path.isfile(PyWinUtils().GetExeDirectory() + '\\applog.ini'):
-                    shell32 = ctypes.windll.LoadLibrary("shell32.dll");
-                    shell32.ShellExecuteA(None,'open', 'notepad',PyWinUtils().GetExeDirectory() + '\\applog.ini','',1);
+                    #用ctypes会导致程序崩溃
+                    #shell32 = ctypes.windll.LoadLibrary("shell32.dll");
+                    #shell32.ShellExecuteA(None,'open', 'notepad',PyWinUtils().GetExeDirectory() + '\\applog.ini','',1);
+                    #PyWinUtils().ShellExcute(0, 'open', PyWinUtils().GetExeDirectory() + '\\applog.ini', '', '', 1)
                     PyWinUtils().ShellExcute(0, 'open', PyWinUtils().GetExeDirectory() + '\\applog.ini', '', '', 1)
                 else:
                     UICommon.ShowMessageBox(self.GetHWnd(), '错误', '日志文件不存在')

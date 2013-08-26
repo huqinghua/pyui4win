@@ -41,6 +41,44 @@ inline LPCTSTR GetExeFolder()
 	return g_szExeFolder;
 }
 
+__declspec(selectany) TCHAR g_szBuffer[MAX_PATH + 1] = {0};
+inline LPCTSTR GetExeFolderFilePath(LPCTSTR pMore, TCHAR *szBuffer = g_szBuffer)
+{
+	// 注意用默认参数的时候有潜在的多线程问题
+	::PathCombine(szBuffer, GetExeFolder(), pMore);
+	return szBuffer;
+}
+
+void LOGEx1(LPCTSTR lpszFormat, ...)
+{
+	va_list args;
+	va_start(args, lpszFormat);
+
+	HRESULT hr;
+	TCHAR szBuffer[5120]={0};	
+	hr = StringCchVPrintf(szBuffer, _countof(szBuffer), lpszFormat, args);
+	szBuffer[ _countof(szBuffer) - 1 ] = 0;
+	va_end(args);
+
+	static int nIndex = 0;
+	nIndex++;
+	SYSTEMTIME sysToday;
+	GetLocalTime(&sysToday);
+	CString strTime;
+	strTime.Format( _T("%04d-%02d-%02d %02d:%02d:%02d:%04d_%d process %d")
+		, sysToday.wYear
+		, sysToday.wMonth
+		, sysToday.wDay
+		, sysToday.wHour
+		, sysToday.wMinute
+		, sysToday.wSecond
+		, sysToday.wMilliseconds
+		, nIndex
+		, GetCurrentProcessId());
+
+	WritePrivateProfileString(_T("main"),strTime, szBuffer, GetExeFolderFilePath("applog.ini"));
+}
+
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpCmdLine*/, int nCmdShow)
 {
     HRESULT Hr = ::CoInitialize(NULL);
@@ -91,6 +129,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*l
 	catch(boost::python::error_already_set const &)
 	{  
 		std::string err = parse_python_exception();
+		LOGEx1(err.c_str());
 		PyErr_Clear();
 	}  
 	catch (...)
