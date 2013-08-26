@@ -1,2 +1,6 @@
+依赖库:
 boost_1_53_0
 python27
+
+demo:
+运行CompleteDemo.py，然后就可以执行各个demo

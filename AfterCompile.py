@@ -14,7 +14,7 @@ import ctypes
 
 if __name__ == "__main__":
     files = [r'.\bin\_PyDui4Win.exe', r'.\bin\Launcher.exe', r'.\bin\_PyDui4Win.pyd']
-    dests = [r".\Demo1\\", r".\Demo2\\"]
+    dests = [r".\Demo1\\", r".\Demo2\\", r".\Demo3\\", r".\Demo4\\", r".\Tamplate\\"]
     try:
         for file in files:
             for dest in dests:
