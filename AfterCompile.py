@@ -1,6 +1,5 @@
-__author__ = 'huqinghua'
 # coding=gbk
-
+__author__ = 'huqinghua'
 import string, os, commands, time
 import threading
 import shutil
@@ -9,8 +8,6 @@ from shutil import make_archive
 from ftplib import FTP
 import zipfile
 import ctypes
-
-
 
 if __name__ == "__main__":
     files = [r'.\bin\_PyDui4Win.exe', r'.\bin\Launcher.exe', r'.\bin\_PyDui4Win.pyd']
