@@ -139,7 +139,7 @@ public:
 class IMessageFilterUI
 {
 public:
-    virtual LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, bool& bHandled) = 0;
+    virtual LRESULT FilterMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, bool& bHandled) = 0;
 };
 
 class ITranslateAccelerator
@@ -313,8 +313,8 @@ public:
     static bool TranslateMessage(const LPMSG pMsg);
 	static void Term();
 
-    bool MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT& lRes);
-    bool PreMessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT& lRes);
+    bool HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT& lRes);
+    bool PreFilterMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT& lRes);
 	void UsedVirtualWnd(bool bUsed);
 
 private:

@@ -165,7 +165,7 @@ LRESULT CComboWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
     }
 
     LRESULT lRes = 0;
-    if( m_pm.MessageHandler(uMsg, wParam, lParam, lRes) ) return lRes;
+    if( m_pm.HandleMessage(uMsg, wParam, lParam, lRes) ) return lRes;
     return CWindowWnd::HandleMessage(uMsg, wParam, lParam);
 }
 

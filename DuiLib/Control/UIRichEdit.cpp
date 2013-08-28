@@ -2121,7 +2121,7 @@ void CRichEditUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     else CContainerUI::SetAttribute(pstrName, pstrValue);
 }
 
-LRESULT CRichEditUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, bool& bHandled)
+LRESULT CRichEditUI::FilterMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, bool& bHandled)
 {
     if( !IsVisible() || !IsEnabled() ) return 0;
     if( !IsMouseEnabled() && uMsg >= WM_MOUSEFIRST && uMsg <= WM_MOUSELAST ) return 0;
