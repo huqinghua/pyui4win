@@ -46,7 +46,7 @@ namespace DuiLib
 		virtual CDuiString GetZIPFileName() const;
 		virtual LPCTSTR GetResourceID() const;
 		virtual CControlUI* CreateControl(LPCTSTR pstrClass);
-		virtual LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM /*lParam*/, bool& /*bHandled*/);
+		virtual LRESULT FilterMessage(UINT uMsg, WPARAM wParam, LPARAM /*lParam*/, bool& /*bHandled*/);
 		virtual LRESULT OnClose(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled);
 		virtual LRESULT OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled);
 

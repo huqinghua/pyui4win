@@ -122,7 +122,7 @@ public:
 
     void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
 
-    LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, bool& bHandled);
+    LRESULT FilterMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, bool& bHandled);
 
 protected:
     CTxtWinHost* m_pTwh;

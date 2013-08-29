@@ -463,12 +463,12 @@ void CPaintManagerUI::SetShowUpdateRect(bool show)
     m_bShowUpdateRect = show;
 }
 
-bool CPaintManagerUI::PreMessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT& /*lRes*/)
+bool CPaintManagerUI::PreFilterMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT& /*lRes*/)
 {
     for( int i = 0; i < m_aPreMessageFilters.GetSize(); i++ ) 
     {
         bool bHandled = false;
-        LRESULT lResult = static_cast<IMessageFilterUI*>(m_aPreMessageFilters[i])->MessageHandler(uMsg, wParam, lParam, bHandled);
+        LRESULT lResult = static_cast<IMessageFilterUI*>(m_aPreMessageFilters[i])->FilterMessage(uMsg, wParam, lParam, bHandled);
         if( bHandled ) {
             return true;
         }
@@ -516,7 +516,7 @@ bool CPaintManagerUI::PreMessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam,
     return false;
 }
 
-bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT& lRes)
+bool CPaintManagerUI::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT& lRes)
 {
 //#ifdef _DEBUG
 //    switch( uMsg ) {
@@ -547,7 +547,7 @@ bool CPaintManagerUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, LR
     for( int i = 0; i < m_aMessageFilters.GetSize(); i++ ) 
     {
         bool bHandled = false;
-        LRESULT lResult = static_cast<IMessageFilterUI*>(m_aMessageFilters[i])->MessageHandler(uMsg, wParam, lParam, bHandled);
+        LRESULT lResult = static_cast<IMessageFilterUI*>(m_aMessageFilters[i])->FilterMessage(uMsg, wParam, lParam, bHandled);
         if( bHandled ) {
             lRes = lResult;
             return true;
@@ -2263,7 +2263,7 @@ bool CPaintManagerUI::TranslateMessage(const LPMSG pMsg)
 					if (pT->TranslateAccelerator(pMsg))
 						return true;
 
-					if( pT->PreMessageHandler(pMsg->message, pMsg->wParam, pMsg->lParam, lRes) ) 
+					if( pT->PreFilterMessage(pMsg->message, pMsg->wParam, pMsg->lParam, lRes) ) 
 						return true;
 
 					return false;
@@ -2282,7 +2282,7 @@ bool CPaintManagerUI::TranslateMessage(const LPMSG pMsg)
 				if (pT->TranslateAccelerator(pMsg))
 					return true;
 
-				if( pT->PreMessageHandler(pMsg->message, pMsg->wParam, pMsg->lParam, lRes) ) 
+				if( pT->PreFilterMessage(pMsg->message, pMsg->wParam, pMsg->lParam, lRes) ) 
 					return true;
 
 				return false;

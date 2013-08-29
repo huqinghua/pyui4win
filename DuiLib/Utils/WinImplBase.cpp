@@ -62,7 +62,7 @@ CControlUI* WindowImplBase::CreateControl(LPCTSTR pstrClass)
 	return NULL;
 }
 
-LRESULT WindowImplBase::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM /*lParam*/, bool& /*bHandled*/)
+LRESULT WindowImplBase::FilterMessage(UINT uMsg, WPARAM wParam, LPARAM /*lParam*/, bool& /*bHandled*/)
 {
 	if (uMsg == WM_KEYDOWN)
 	{
@@ -402,7 +402,7 @@ LRESULT WindowImplBase::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	lRes = HandleCustomMessage(uMsg, wParam, lParam, bHandled);
 	if (bHandled) return lRes;
 
-	if (m_PaintManager.MessageHandler(uMsg, wParam, lParam, lRes))
+	if (m_PaintManager.HandleMessage(uMsg, wParam, lParam, lRes))
 		return lRes;
 	return CWindowWnd::HandleMessage(uMsg, wParam, lParam);
 }

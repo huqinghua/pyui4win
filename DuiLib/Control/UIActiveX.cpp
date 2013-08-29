@@ -952,7 +952,7 @@ void CActiveXUI::SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue)
     else CControlUI::SetAttribute(pstrName, pstrValue);
 }
 
-LRESULT CActiveXUI::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, bool& bHandled)
+LRESULT CActiveXUI::FilterMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, bool& bHandled)
 {
     if( m_pControl == NULL ) return 0;
     ASSERT(m_pControl->m_bWindowless);
