@@ -6,7 +6,7 @@ import string, os, commands, time
 
 from PyUI import PyWinUtils
 
-class PyWin32Utils():
+class PyWin32Util():
 
     @classmethod
     def ReverseToExePath(cls):
