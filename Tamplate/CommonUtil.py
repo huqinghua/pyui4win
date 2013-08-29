@@ -1,5 +1,5 @@
-__author__ = 'huqinghua'
 # coding=gbk
+# __author__ = 'huqinghua'
 
 import string, os, commands, time
 
