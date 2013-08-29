@@ -7,6 +7,7 @@ from MsgBox import *
 from PyFrameBase import *
 import UICommon
 from CommonUtil import CommonUtils
+from PyWin32Utils import PyWin32Util
 
 XP = 1
 WIN7 = 2
@@ -71,7 +72,8 @@ class MainFrame(PyFrameBase):
                 self.ContainerUIStep1.SetVisible(False)
                 self.ContainerUIStep2.SetVisible(False)
                 self.ContainerUIStep3.SetVisible(True)
-                PyWinUtils().KillTimer(self.GetHWnd(), 2)
+                #PyWinUtils().KillTimer(self.GetHWnd(), 2)
+                self.KillTimer(2)
             else:
                 self.ProgressDownload.SetValue(self.progress)
                 self.LabelWaiting.SetText('正在下载，请耐心等待(%d/100)' % self.progress)
@@ -80,7 +82,7 @@ class MainFrame(PyFrameBase):
     def OnNotify(self, sendor, sType, wParam, lParam):
         if sType == DUI_MSGTYPE_CLICK:
             if sendor == "BtnDownloadTooSlow":
-                PyWinUtils().ShellExcute(0, 'open', 'http://www.xiaoniuhui.com/index.php#!/%E5%B0%8F%E5%A6%9E%E4%BC%9A%E8%A3%85%E6%9C%BA', '', '', 1)
+                PyWin32Util.ShellExcute(0, 'open', 'http://www.xiaoniuhui.com/index.php#!/%E5%B0%8F%E5%A6%9E%E4%BC%9A%E8%A3%85%E6%9C%BA', '', '', 1)
             elif sendor == "BtnWin7" or sendor == "BtnXP":
                 if sendor == "BtnWin7":
                     self.os = WIN7
@@ -99,7 +101,8 @@ class MainFrame(PyFrameBase):
                 self.ContainerUIStep2.SetVisible(True)
                 self.ContainerUIStep3.SetVisible(False)
 
-                PyWinUtils().SetTimer(self.GetHWnd(), 2, 1000)
+                #PyWinUtils().SetTimer(self.GetHWnd(), 2, 1000)
+                self.SetTimer(2, 1000)
             elif sendor == "ButtonUIReboot":
                 pass
             elif sendor == "adv1":
