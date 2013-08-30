@@ -18,6 +18,7 @@ from MsgBox import *
 from PyFrameBase import *
 import UICommon
 from CommonUtil import CommonUtils
+from PyWin32Utils import PyWin32Util
 
 class {CLASS_NAME}(PyFrameBase):
     def __init__(self):
