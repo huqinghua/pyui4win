@@ -79,3 +79,5 @@ class PyWin32Util():
     @classmethod
     def SelectFolder(cls, hwnd, title, saveTag = ''):
         return PyWinUtils().SelectFolder( hwnd, title, saveTag)
+
+    
