@@ -187,6 +187,12 @@ class PyFrameBase(PyUIBase):
             #PyLog().LogText( 'OnCustomTimer()')
         pass
 
+    def SetTimer(self, nIDEvent, uElapse):
+        PyWinUtils().SetTimer(self.GetHWnd(), nIDEvent, uElapse)
+
+    def KillTimer(self, nIDEvent):
+        PyWinUtils().KillTimer(self.GetHWnd(), nIDEvent)
+
 def GiveUp():
     #PyLog().LogText( "GiveUp")
     time.sleep(0)

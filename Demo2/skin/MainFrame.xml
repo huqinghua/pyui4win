@@ -29,7 +29,7 @@
                 </HorizontalLayout>
             </VerticalLayout>
         </HorizontalLayout>
-        <TabLayout name="TLU_client">
+        <TabLayout name="TLU_client" selectedid="0">
             <HorizontalLayout>
                 <VerticalLayout width="179">
                     <TabLayout name="TLU_subFun">
@@ -50,6 +50,39 @@
                     <TabLayout name="TLU_client1">
                         <VerticalLayout bordersize="1" bordercolor="#00008000" inset="1,0,1,0">
                             <WebBrowser name="ie" />
+                        </VerticalLayout>
+                    </TabLayout>
+                </VerticalLayout>
+            </HorizontalLayout>
+            <HorizontalLayout>
+                <VerticalLayout width="179">
+                    <TabLayout name="TLU_subFun2">
+                        <VerticalLayout width="180" height="575" inset="1,0,0,0" />
+                        <VerticalLayout name="FlushRomTab2" />
+                    </TabLayout>
+                </VerticalLayout>
+                <VerticalLayout>
+                    <TabLayout name="TLU_client2">
+                        <VerticalLayout bordersize="1" bordercolor="#00008000" inset="1,0,1,0">
+							<List name="domainlist" bkcolor="#FFFFFFFF" menu="true" itemtextcolor="#FF000000" itembkcolor="#FFE2DDDF" itemselectedtextcolor="#FF000000" itemselectedbkcolor="#FFC1E3FF" itemhottextcolor="#FF000000" itemhotbkcolor="#FFE9F5FF" itemdisabledtextcolor="#FFCCCCCC" itemdisabledbkcolor="#FFFFFFFF" headerbkimage="file=&apos;list_header_bg.png&apos;" itemshowhtml="true" vscrollbar="true">
+								<ListHeader height="24" bkimage="file=&apos;list_header_bg.png&apos;" menu="true">
+									<ListHeaderItem text="No" width="30" minwidth="16" textcolor="#FF000000" sepwidth="1" align="center" hotimage="file=&apos;list_header_hot.png&apos;" pushedimage="file=&apos;list_header_pushed.png&apos;" sepimage="file=&apos;list_header_sep.png&apos;" />
+									<ListHeaderItem text="Domain" width="260" minwidth="16" textcolor="#FF000000" sepwidth="1" align="center" hotimage="file=&apos;list_header_hot.png&apos;" pushedimage="file=&apos;list_header_pushed.png&apos;" sepimage="file=&apos;list_header_sep.png&apos;" />
+									<ListHeaderItem text="Description" width="240" minwidth="16" textcolor="#FF000000" sepwidth="1" align="center" hotimage="file=&apos;list_header_hot.png&apos;" pushedimage="file=&apos;list_header_pushed.png&apos;" sepimage="file=&apos;list_header_sep.png&apos;" />
+								</ListHeader>
+								<ListElementTemplate height="45">
+									<Container>
+										<CheckBox name="ChkRoot" text="Root打包" float="true" pos="0,0,0,0" width="50" height="23" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" font="2" align="center" normalimage="file=&apos;checkbox.png&apos; dest=&apos;0,0,13,13&apos; source=&apos;0,0,13,13&apos;" hotimage="file=&apos;checkbox.png&apos; dest=&apos;0,0,13,13&apos; source=&apos;13,0,26,13&apos;" disabledimage="file=&apos;checkbox.png&apos; dest=&apos;0,0,13,13&apos; source=&apos;26,0,39,13&apos;" selectedimage="file=&apos;checkbox.png&apos; dest=&apos;0,0,13,13&apos; source=&apos;52,0,65,13&apos;" />
+										<Button name="bnt2" float="true" pos="70,0,0,0" width="29" height="24" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" normalimage="file=&apos;sysmenu_close.png&apos; source=&apos;0,0,28,23&apos;" hotimage="file=&apos;sysmenu_close.png&apos; source=&apos;29,0,57,23&apos;" pushedimage="file=&apos;sysmenu_close.png&apos; source=&apos;58,0,86,23&apos;" />
+									</Container>
+									<Container>
+										<Progress name="PrgSdcard" bordersize="1" float="true" pos="0,0,0,0" width="100" height="32" bordercolor="#00008000" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" foreimage="progress.png" min="0" max="100" value="40" hor="true" />
+									</Container>
+									<Container>
+										<Label name="lbl1" text="Name : " textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" font="2" align="right" />
+									</Container>									
+								</ListElementTemplate>
+							</List>
                         </VerticalLayout>
                     </TabLayout>
                 </VerticalLayout>

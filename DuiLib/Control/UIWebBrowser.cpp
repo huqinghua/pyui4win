@@ -227,11 +227,22 @@ void DuiLib::CWebBrowserUI::ProgressChange( LONG nProgress, LONG nProgressMax )
 
 void DuiLib::CWebBrowserUI::NewWindow3( IDispatch **pDisp, VARIANT_BOOL *&Cancel, DWORD dwFlags, BSTR bstrUrlContext, BSTR bstrUrl )
 {
-	if (m_pWebBrowserEventHandler)
+	//IDispatch* spDoc;   
+	//m_pWebBrowser2->get_Document(&spDoc);   
+
+	*Cancel = TRUE; 
+	//*ppDisp = spDoc;
+
+	if (m_pWebBrowser2)
 	{
-		m_pWebBrowserEventHandler->NewWindow3(pDisp,Cancel,dwFlags,bstrUrlContext,bstrUrl);
+		m_pWebBrowser2->Navigate(bstrUrl,NULL,NULL,NULL,NULL);
 	}
+	//if (m_pWebBrowserEventHandler)
+	//{
+	//	m_pWebBrowserEventHandler->NewWindow3(pDisp,Cancel,dwFlags,bstrUrlContext,bstrUrl);
+	//}
 }
+
 void DuiLib::CWebBrowserUI::CommandStateChange(long Command,VARIANT_BOOL Enable)
 {
 	if (m_pWebBrowserEventHandler)
@@ -257,7 +268,7 @@ STDMETHODIMP DuiLib::CWebBrowserUI::ShowContextMenu( DWORD dwID, POINT* pptPosit
 	{
 		return m_pWebBrowserEventHandler->ShowContextMenu(dwID,pptPosition,pCommandTarget,pDispatchObjectHit);
 	}
-	return S_FALSE;
+	return S_OK;
 }
 
 STDMETHODIMP DuiLib::CWebBrowserUI::GetHostInfo( DOCHOSTUIINFO* pInfo )

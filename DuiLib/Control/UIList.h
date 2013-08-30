@@ -190,6 +190,8 @@ public:
     virtual CScrollBarUI* GetVerticalScrollBar() const;
     virtual CScrollBarUI* GetHorizontalScrollBar() const;
     BOOL SortItems(PULVCompareFunc pfnCompare, UINT_PTR dwData);
+
+	CControlUI *CloneListElement();
 protected:
     bool m_bScrollSelect;
     int m_iCurSel;
@@ -198,6 +200,7 @@ protected:
     CListBodyUI* m_pList;
     CListHeaderUI* m_pHeader;
     TListInfoUI m_ListInfo;
+	CControlUI *m_ListElementTemplate;
 };
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -207,6 +210,9 @@ class UILIB_API CListBodyUI : public CVerticalLayoutUI
 {
 public:
     CListBodyUI(CListUI* pOwner);
+
+	LPCTSTR GetClass() const;
+	LPVOID GetInterface(LPCTSTR pstrName);
 
     void SetScrollPos(SIZE szPos);
     void SetPos(RECT rc);
@@ -436,6 +442,47 @@ protected:
     bool m_bSelected;
     UINT m_uButtonState;
     IListOwnerUI* m_pOwner;
+};
+
+
+
+class UILIB_API CListTemplateElementUI : public CHorizontalLayoutUI, public IListItemUI
+{
+public:
+	CListTemplateElementUI();
+
+	LPCTSTR GetClass() const;
+	UINT GetControlFlags() const;
+	LPVOID GetInterface(LPCTSTR pstrName);
+
+	int GetIndex() const;
+	void SetIndex(int iIndex);
+
+	IListOwnerUI* GetOwner();
+	void SetOwner(CControlUI* pOwner);
+	void SetVisible(bool bVisible = true);
+	void SetEnabled(bool bEnable = true);
+
+	bool IsSelected() const;
+	bool Select(bool bSelect = true);
+	bool IsExpanded() const;
+	bool Expand(bool bExpand = true);
+
+	void Invalidate(); // 直接CControl::Invalidate会导致滚动条刷新，重写减少刷新区域
+	bool Activate();
+
+	void DoEvent(TEventUI& event);
+	void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
+	void DoPaint(HDC hDC, const RECT& rcPaint);
+
+	void DrawItemText(HDC hDC, const RECT& rcItem);    
+	void DrawItemBk(HDC hDC, const RECT& rcItem);
+
+protected:
+	int m_iIndex;
+	bool m_bSelected;
+	UINT m_uButtonState;
+	IListOwnerUI* m_pOwner;
 };
 
 } // namespace DuiLib

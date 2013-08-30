@@ -38,6 +38,7 @@ SW_RESTORE          =9
 SW_SHOWDEFAULT      =10
 SW_FORCEMINIMIZE    =11
 SW_MAX              =11
+
 class PyWin32Util():
 
     @classmethod
@@ -80,4 +81,3 @@ class PyWin32Util():
     def SelectFolder(cls, hwnd, title, saveTag = ''):
         return PyWinUtils().SelectFolder( hwnd, title, saveTag)
 
-    
