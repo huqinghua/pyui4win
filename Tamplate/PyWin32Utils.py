@@ -65,7 +65,7 @@ class PyWin32Util():
         PyWinUtils().SetArrowCursor()
 
     @classmethod
-    def ShellExcute(cls, hwnd, lpFile, lpOperation = 'open', lpParameters = '', lpDirectory = '', nShowCmd = SW_SHOWNORMAL):
+    def ShellExcute(cls, hwnd, lpOperation, lpFile, lpParameters = '', lpDirectory = '', nShowCmd = SW_SHOWNORMAL):
         return PyWinUtils().ShellExcute(hwnd,lpOperation,lpFile,lpParameters,lpDirectory,nShowCmd)
 
     @classmethod
