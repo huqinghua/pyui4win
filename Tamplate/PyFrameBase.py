@@ -182,9 +182,9 @@ class PyFrameBase(PyUIBase):
         pass
 
     def OnCustomTimer(self, wParam, lParam):
-        if wParam == 1:
-            time.sleep(0)
-            #PyLog().LogText( 'OnCustomTimer()')
+#        if wParam == 1:
+#            time.sleep(0)
+#            PyLog().LogText( 'OnCustomTimer()')
         pass
 
     def SetTimer(self, nIDEvent, uElapse):

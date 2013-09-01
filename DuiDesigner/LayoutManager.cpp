@@ -501,7 +501,7 @@ LRESULT CFormTestWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	}
 	if( bHandled )
 		return lRes;
-	if( m_pManager->MessageHandler(uMsg, wParam, lParam, lRes) )
+	if( m_pManager->HandleMessage(uMsg, wParam, lParam, lRes) )
 		return lRes;
 	return CWindowWnd::HandleMessage(uMsg, wParam, lParam);
 }

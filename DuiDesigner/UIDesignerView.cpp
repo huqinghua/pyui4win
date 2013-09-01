@@ -1275,7 +1275,7 @@ void CUIDesignerView::OnGenerateCode()
 		switch (ret)
 		{
 		case 0:
-			MessageBox(_T("成功生成代码"), _T("提示"), MB_ICONINFORMATION);
+			//MessageBox(_T("成功生成代码"), _T("提示"), MB_ICONINFORMATION);
 			break;
 		case -1:
 			MessageBox(_T("还未实现"), _T("提示"), MB_ICONERROR);
