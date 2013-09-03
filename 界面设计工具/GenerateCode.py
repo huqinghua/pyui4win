@@ -64,6 +64,8 @@ class GenerateCode():
     def GenerateCode(self, skinXmlPath):
         self.skinXmlPath = skinXmlPath
         if not os.path.isfile(skinXmlPath):
+            shell32 = ctypes.windll.LoadLibrary("user32.dll");
+            shell32.MessageBoxA(None,'请先保存界面配置xml文件', '错误',0x10L);
             return -2
 
         # 分析xml皮肤
@@ -98,7 +100,7 @@ class GenerateCode():
         self.codeTemp = codeTemplate.replace('\n', '\r\n')
         self.code = self.codeTemp.format(\
             CLASS_NAME = os.path.basename(skinXmlPath).split('.')[0],\
-            ON_PREPARE = prepare_code,\
+            ON_PREPARE = prepare_code if prepare_code != '' else '        pass',\
             ON_CLICK = click_code if click_code != '' else '            pass',\
             ON_ITEMSELECT = itemselect_code if itemselect_code != '' else '            pass'\
         )
