@@ -1280,6 +1280,8 @@ void CUIDesignerView::OnGenerateCode()
 		case -1:
 			MessageBox(_T("还未实现"), _T("提示"), MB_ICONERROR);
 			break;
+		case -2:
+			break;
 		default:
 			MessageBox(_T("出错啦"), _T("提示"), MB_ICONERROR);
 			break;
