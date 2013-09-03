@@ -47,9 +47,11 @@ class EazDownload():
                 f.write(data)
                 self.downloaded_size += len(data)
                 self.show_progress_obj.show_progress(self.downloaded_size, int(self.file_size))
+            f.close()
         except Exception,e:
             PyLog().LogText( 'download error: %s'%e)
             return False
+
         return True
 
     def download(self):

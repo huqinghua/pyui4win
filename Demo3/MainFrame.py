@@ -29,6 +29,7 @@ class MainFrame(PyFrameBase):
         self.skinFileName = self.__class__.__name__ + '.xml'
         self.progress = 0
         self.os = 0
+        self.progress_color = 0
 
     def GetSkinFile(self):
         return self.skinFileName
@@ -73,25 +74,31 @@ class MainFrame(PyFrameBase):
 
     def OnCustomTimer(self, wParam, lParam):
         if wParam == 2:
-            self.progress = self.progress + 1
-            if self.progress >= 100:
-                if self.os == WIN7:
-                    self.LabelUIDescription.SetText('已经准备好安装 Win7 系统到您的计算机')
-                else:
-                    self.LabelUIDescription.SetText('已经准备好安装 XP 系统到您的计算机')
-                self.ButtonUIReboot.SetVisible(True)
-                self.ContainerUIStep1.SetVisible(False)
-                self.ContainerUIStep2.SetVisible(False)
-                self.ContainerUIStep3.SetVisible(True)
-                #PyWinUtils().KillTimer(self.GetHWnd(), 2)
-                self.KillTimer(2)
+            if self.progress_color == 0:
+                self.ProgressDownload.pControl.SetBorderColor(0xaa00000)
+                self.progress_color = 0xaa0000
             else:
-                self.ProgressDownload.SetValue(self.progress)
-                self.LabelWaiting.SetText('正在下载，请耐心等待(%d/100)' % self.progress)
-        pass
+                self.ProgressDownload.pControl.SetBorderColor(0)
+                self.progress_color = 0
+#            self.progress = self.progress + 1
+#            if self.progress >= 100:
+#                if self.os == WIN7:
+#                    self.LabelUIDescription.SetText('已经准备好安装 Win7 系统到您的计算机')
+#                else:
+#                    self.LabelUIDescription.SetText('已经准备好安装 XP 系统到您的计算机')
+#                self.ButtonUIReboot.SetVisible(True)
+#                self.ContainerUIStep1.SetVisible(False)
+#                self.ContainerUIStep2.SetVisible(False)
+#                self.ContainerUIStep3.SetVisible(True)
+#                #PyWinUtils().KillTimer(self.GetHWnd(), 2)
+#                self.KillTimer(2)
+#            else:
+#                self.ProgressDownload.SetValue(self.progress)
+#                self.LabelWaiting.SetText('正在下载，请耐心等待(%d/100)' % self.progress)
+#        pass
 
     def show_progress(self, downloaded, total):
-        self.LabelWaiting.SetText('正在下载，请耐心等待( %.1f / %.1f MB)'%(float(downloaded)/1024/1024, float(total)/1024/1024))
+        self.LabelWaiting.SetText('已经下载( %.1f / %.1f MB)，请耐心等待...'%(float(downloaded)/1024/1024, float(total)/1024/1024))
         percent = (downloaded*100)/total
         if self.percent < percent:
             self.ProgressDownload.SetValue(percent)
@@ -118,9 +125,13 @@ class MainFrame(PyFrameBase):
                 self.ContainerUIStep3.SetVisible(True)
             else:
                 self.LabelWaiting.SetText('镜像下载出错啦')
+                #PyWinUtils().SetTimer(self.GetHWnd(), 2, 1000)
+                self.SetTimer(2, 1000)
         except Exception, e:
             PyLog().LogText('%s' % e)
             self.LabelWaiting.SetText('镜像下载出错啦')
+            #PyWinUtils().SetTimer(self.GetHWnd(), 2, 1000)
+            self.SetTimer(2, 1000)
 
     def OnNotify(self, sendor, sType, wParam, lParam):
         if sType == DUI_MSGTYPE_CLICK:
@@ -146,8 +157,6 @@ class MainFrame(PyFrameBase):
                 t = threading.Thread(target=PyThreadDownloadEaz,args=(self,))
                 t.start()
 
-                #PyWinUtils().SetTimer(self.GetHWnd(), 2, 1000)
-                #self.SetTimer(2, 1000)
             elif sendor == "ButtonUIReboot":
                 pass
             elif sendor == "adv1":
