@@ -6,6 +6,7 @@ import string, os, commands, time
 class CommonUtils():
     """∑÷œÌ”√session"""
     exeRoot = ''
+    bDebug = True
 
     @classmethod
     def SaveExePath(cls):
@@ -14,3 +15,8 @@ class CommonUtils():
     @classmethod
     def ReverseToExePath(cls):
         os.chdir(cls.exeRoot)
+
+def Debug(msg):
+    if CommonUtils.bDebug:
+        print msg
+
