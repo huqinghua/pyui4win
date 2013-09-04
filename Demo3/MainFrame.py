@@ -22,6 +22,7 @@ def PyThreadDownloadEaz(PyClassInstance, ):
         PyLog().LogText(str(e))
     PyLog().LogText('PyThreadExecute exit')
 
+
 class MainFrame(PyFrameBase):
     def __init__(self):
         super(MainFrame, self).__init__()
@@ -30,6 +31,7 @@ class MainFrame(PyFrameBase):
         self.progress = 0
         self.os = 0
         self.progress_color = 0
+        self.eazfile_size = 0
 
     def GetSkinFile(self):
         return self.skinFileName
@@ -73,6 +75,9 @@ class MainFrame(PyFrameBase):
         self.ContainerUIStep3.SetVisible(False)
 
     def OnCustomTimer(self, wParam, lParam):
+        """
+        wParam:  时间id
+        """
         if wParam == 2:
             if self.progress_color == 0:
                 self.ProgressDownload.pControl.SetBorderColor(0xaa00000)
@@ -81,10 +86,9 @@ class MainFrame(PyFrameBase):
                 self.ProgressDownload.pControl.SetBorderColor(0)
                 self.progress_color = 0
 
-
-    def show_progress(self, downloaded, total):
-        self.LabelWaiting.SetText('已经下载( %.1f / %.1f MB)，请耐心等待...'%(float(downloaded)/1024/1024, float(total)/1024/1024))
-        percent = (downloaded*100)/total
+    def show_progress(self):
+        self.LabelWaiting.SetText('已经下载( %.1f / %.1f MB)，请耐心等待...'%(float(self.download.get_all_download_bytes())/1024/1024, float(self.eazfile_size)/1024/1024))
+        percent = (self.download.get_all_download_bytes()*100)/self.eazfile_size
         if self.percent < percent:
             self.ProgressDownload.SetValue(percent)
             self.percent = percent
@@ -92,56 +96,68 @@ class MainFrame(PyFrameBase):
     def DownloadEazFile(self):
         try:
             self.percent = 0
+            url = ''
+            pattern = ''
             if self.os == WIN7:
-                download = DownloadEaz.EazDownload('http://pan.baidu.com/share/link?shareid=2475901380&uk=70461429', r'http:\\\\/\\\\/d\.pcs\.baidu\.com\\\\/file\\\\/f477e96d80f27717b821861ab4fa7b45\?fid=.*?&sh=1', self)
-                self.download_result = download.start()
+                url = 'http://pan.baidu.com/share/link?shareid=2475901380&uk=70461429'
+                pattern = r'http:\\\\/\\\\/d\.pcs\.baidu\.com\\\\/file\\\\/f477e96d80f27717b821861ab4fa7b45\?fid=.*?&sh=1'
             else:
-                download = DownloadEaz.EazDownload('http://pan.baidu.com/share/link?shareid=2423534928&uk=70461429', r'http:\\\\/\\\\/d\.pcs\.baidu\.com\\\\/file\\\\/37c58125068409bf538e3321e5e46d57\?fid=.*?&sh=1', self)
-                self.download_result =  download.start()
+                url = 'http://pan.baidu.com/share/link?shareid=2423534928&uk=70461429'
+                pattern = r'http:\\\\/\\\\/d\.pcs\.baidu\.com\\\\/file\\\\/37c58125068409bf538e3321e5e46d57\?fid=.*?&sh=1'
 
-            if self.download_result:
-                if self.os == WIN7:
-                    self.LabelUIDescription.SetText('已经准备好安装 Win7 系统到您的计算机')
-                else:
-                    self.LabelUIDescription.SetText('已经准备好安装 XP 系统到您的计算机')
-                self.ButtonUIReboot.SetVisible(True)
-                self.ContainerUIStep1.SetVisible(False)
-                self.ContainerUIStep2.SetVisible(False)
-                self.ContainerUIStep3.SetVisible(True)
-            else:
-                self.LabelWaiting.SetText('镜像下载出错啦')
-                #PyWinUtils().SetTimer(self.GetHWnd(), 2, 1000)
-                self.SetTimer(2, 1000)
+            self.download = DownloadEaz.EazDownload(url, pattern, self)
+            if self.download.get_file_info():
+                self.eazfile_size = self.download.file_size
+                if self.download.GetDownloadPath() is None:
+                    self.LabelWaiting.SetText('磁盘空间太小啦')
+                    self.SetTimer(2, 1000)
+                    return
+                elif self.download.download_file(os.path.join(self.download.GetDownloadPath(),'os.eaz')):
+                    if self.os == WIN7:
+                        self.LabelUIDescription.SetText('已经准备好安装 Win7 系统到您的计算机')
+                    else:
+                        self.LabelUIDescription.SetText('已经准备好安装 XP 系统到您的计算机')
+                    self.ButtonUIReboot.SetVisible(True)
+                    self.ContainerUIStep1.SetVisible(False)
+                    self.ContainerUIStep2.SetVisible(False)
+                    self.ContainerUIStep3.SetVisible(True)
+                    return
+
+            self.LabelWaiting.SetText('镜像下载出错啦')
+            #PyWinUtils().SetTimer(self.GetHWnd(), 2, 1000)
+            self.SetTimer(2, 1000)
         except Exception, e:
             PyLog().LogText('%s' % e)
             self.LabelWaiting.SetText('镜像下载出错啦')
             #PyWinUtils().SetTimer(self.GetHWnd(), 2, 1000)
             self.SetTimer(2, 1000)
 
+    def OnBtnWin7orBtnXP(self, sendor, sType, wParam, lParam):
+        if sendor == "BtnWin7":
+            self.os = WIN7
+            self.LabelUIOS.SetBkImage('win7.jpg')
+            self.LabelUIDescription.SetText('正在下载 Win7 系统到您的计算机...')
+        else:
+            self.os = XP
+            self.LabelUIOS.SetBkImage('xp.jpg')
+            self.LabelUIDescription.SetText('正在下载 XP 系统到您的计算机...')
+        self.ProgressDownload.SetMaxValue(100)
+        self.ProgressDownload.SetValue(self.progress)
+        self.LabelWaiting.SetText('开始下载，请耐心等待')
+
+        self.ContainerUIStep1.SetVisible(False)
+        self.ContainerUIStep2.SetVisible(True)
+        self.ContainerUIStep3.SetVisible(False)
+
+        t = threading.Thread(target=PyThreadDownloadEaz,args=(self,))
+        t.start()
+
     def OnNotify(self, sendor, sType, wParam, lParam):
         if sType == DUI_MSGTYPE_CLICK:
             if sendor == "BtnDownloadTooSlow":
                 PyWin32Util.ShellExcute(0, 'open', 'http://www.xiaoniuhui.com/index.php#!/%E5%B0%8F%E5%A6%9E%E4%BC%9A%E8%A3%85%E6%9C%BA', '', '', 1)
             elif sendor == "BtnWin7" or sendor == "BtnXP":
-                if sendor == "BtnWin7":
-                    self.os = WIN7
-                    self.LabelUIOS.SetBkImage('win7.jpg')
-                    self.LabelUIDescription.SetText('正在下载 Win7 系统到您的计算机...')
-                else:
-                    self.os = XP
-                    self.LabelUIOS.SetBkImage('xp.jpg')
-                    self.LabelUIDescription.SetText('正在下载 XP 系统到您的计算机...')
-                self.ProgressDownload.SetMaxValue(100)
-                self.ProgressDownload.SetValue(self.progress)
-                self.LabelWaiting.SetText('开始下载，请耐心等待')
-
-                self.ContainerUIStep1.SetVisible(False)
-                self.ContainerUIStep2.SetVisible(True)
-                self.ContainerUIStep3.SetVisible(False)
-
-                t = threading.Thread(target=PyThreadDownloadEaz,args=(self,))
-                t.start()
-
+                self.OnBtnWin7orBtnXP(sendor, sType, wParam, lParam)
             elif sendor == "ButtonUIReboot":
                 UICommon.ShowMessageBox(self.GetHWnd(), '准备安装', '重启安装部分未实现，请耐心等待...')
             elif sendor == "adv1":

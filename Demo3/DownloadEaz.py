@@ -1,26 +1,31 @@
 # coding=gbk
 # __author__ = 'huqinghua'
 
-import time
+import time, os
 import urllib
 import urllib2
 import re
+import threading
 
-import MainFrame
+#import MainFrame
 from CommonUtil import CommonUtils
 from CommonUtil import Debug
-from PyUI import PyLog
+try:
+    from PyUI import PyLog
+except Exception, e:
+    from PyDebugUtil import PyLog
 
-def Schedule(a,b,c):
-    '''''
-     a:已经下载的数据块
-     b:数据块的大小
-     c:远程文件的大小
-    '''
-    per = 100.0 * a * b / c
-    if per > 100 :
-        per = 100
-    Debug( '%d %.2f%%' % (a*b, per))
+from ctypes import c_ulong, byref, windll
+
+mylock = threading.RLock()
+THREAD_COUNT = 5
+
+def PyThreadDownloadEazFragment(PyClassInstance, url, start_pos, end_pos, f):
+    try:
+        PyClassInstance.download(url, start_pos, end_pos, f)
+    except Exception, e:
+        PyLog().LogText(str(e))
+    PyLog().LogText('PyThreadDownloadEazFragment exit')
 
 class EazDownload():
     def __init__(self, url, pattern, show_progress_obj):
@@ -31,47 +36,7 @@ class EazDownload():
         self.pattern = pattern
         self.downloaded_size = 0
         self.show_progress_obj = show_progress_obj
-
-    def download_file(self, response):
-        try:
-            filepaht = CommonUtils.exeRoot + '\\' + self.file_name
-            PyLog().LogText(filepaht)
-            f = open(filepaht, 'wb')
-            start_time = time.time()
-            self.downloaded_size = 0
-            speed = 0
-            while True:
-                data = response.read(1024*32)
-                if len(data) == 0:
-                    break
-                f.write(data)
-                self.downloaded_size += len(data)
-                self.show_progress_obj.show_progress(self.downloaded_size, int(self.file_size))
-            f.close()
-        except Exception,e:
-            PyLog().LogText( 'download error: %s'%e)
-            return False
-
-        return True
-
-    def download(self):
-        opener = urllib2.build_opener()
-        request = urllib2.Request(self.download_url)
-        request.get_method = lambda: 'HEAD'
-        try:
-            response = opener.open(request)
-            #response.read()
-        except Exception, e:
-            PyLog().LogText('%s %s' % (self.download_url, e))
-            return False
-        else:
-            self.file_size = dict(response.headers).get('content-length', 0)
-            self.file_name = dict(response.headers).get('content-disposition', 'filename=').split('filename=')[1]
-            self.file_name = self.file_name.replace(r'"','')
-            Debug(self.file_size)
-            Debug(self.file_name)
-            #urllib.urlretrieve(self.download_url, r'.\os.eaz', Schedule)
-            return self.download_file(response)
+        self.result = False
 
     def get_download_rul(self):
         req = urllib2.Request(self.baidu_url)
@@ -81,19 +46,117 @@ class EazDownload():
         if len(m) > 0:
             self.download_url = m[0]
             self.download_url = self.download_url.replace(r'\\/', r'/')
-            return self.download()
+            return True
         else:
             return False
 
-    def start(self):
-        return self.get_download_rul()
+    def get_file_info(self):
+        if self.get_download_rul():
+            opener = urllib2.build_opener()
+            request = urllib2.Request(self.download_url)
+            request.get_method = lambda: 'HEAD'
+            try:
+                response = opener.open(request)
+                if response.code != 200:
+                    return False
+                #response.read()
+            except Exception, e:
+                PyLog().LogText('%s %s' % (self.download_url, e))
+                return False
+            else:
+                self.file_size = int(dict(response.headers).get('content-length', 0))
+                self.file_name = dict(response.headers).get('content-disposition', 'filename=').split('filename=')[1].replace(r'"','')
+                PyLog().LogText( 'file size = %d' % self.file_size)
+                PyLog().LogText( 'file name = %s' % self.file_name)
+                return True
+        else:
+            return False
 
+    def download(self, download_url, start_pos, end_pos, f):
+        opener = urllib2.build_opener()
+        request = urllib2.Request(download_url)
+        request.get_method = lambda: 'HEAD'
+        request.headers['Range'] = 'bytes=%s-%s' % (start_pos, end_pos)
+        try:
+            response = opener.open(request)
+            PyLog().LogText( 'file piece size = %d' % int(dict(response.headers).get('content-length', 0)))
+        except Exception, e:
+            PyLog().LogText('%s %s' % (self.download_url, e))
+            return False
+
+        try:
+            start_time = time.time()
+            self.downloaded_size = 0
+            while True:
+                data = response.read(1024*32)
+                if len(data) == 0:
+                    break
+                mylock.acquire()
+                f.seek(start_pos + self.downloaded_size)
+                f.write(data)
+                mylock.release()
+                self.downloaded_size += len(data)
+                if self.show_progress_obj is not None:
+                    self.show_progress_obj.show_progress()
+            self.result = True
+        except Exception,e:
+            PyLog().LogText( 'download error: %s'%e)
+            return False
+
+        return True
+
+    def download_file(self, file_path):
+        self.fragment_size = (self.file_size + THREAD_COUNT - 1)/ THREAD_COUNT
+        self.threads = []
+        self.download_objs = []
+
+        f = open(file_path, 'wb')
+
+        for i in range(THREAD_COUNT):
+            obj = EazDownload('', '', self.show_progress_obj)
+            self.download_objs.append(obj)
+            self.threads.append(threading.Thread(target=PyThreadDownloadEazFragment,args=(obj, self.download_url, i * self.fragment_size,\
+                                                                                          self.file_size if self.fragment_size *(i + 1) - 1 > self.file_size else self.fragment_size *(i + 1) - 1, f)))
+        for t in self.threads:
+            t.start()
+        for t in self.threads:
+            t.join()
+
+        f.close()
+
+        for obj in self.download_objs:
+            if not obj.result:
+                return False
+        return True
+
+    def get_all_download_bytes(self):
+        return sum(obj.downloaded_size for obj in self.download_objs)
+
+    def GetDownloadPath(self):
+        for dirver in [chr(i) for i in range(ord('D'), ord('Z'))]:
+            SectorsPerCluster = c_ulong()
+            BytesPerSector = c_ulong()
+            NumberOfFreeClusters = c_ulong()
+            TotalNumberOfClusters = c_ulong()
+
+            Kernel32 = windll.LoadLibrary("Kernel32.dll");
+            if Kernel32.GetDiskFreeSpaceA(dirver + r':\\', byref(SectorsPerCluster), byref(BytesPerSector), byref(NumberOfFreeClusters), byref(TotalNumberOfClusters)):
+                if NumberOfFreeClusters.value * BytesPerSector.value * SectorsPerCluster.value > self.file_size:
+                    print dirver, SectorsPerCluster.value, BytesPerSector.value, NumberOfFreeClusters.value, TotalNumberOfClusters.value
+                    destdir = dirver + r':\\NetWin_Download'
+                    if os.path.isdir(destdir):
+                        return destdir
+                    else:
+                        try:
+                            os.mkdir(destdir)
+                            return destdir
+                        except Exception, e:
+                            pass
+        return None
 
 if __name__ == '__main__':
-    test = EazDownload('http://pan.baidu.com/share/link?shareid=2475901380&uk=70461429', r'http:\\\\/\\\\/d\.pcs\.baidu\.com\\\\/file\\\\/dsfdsfd.*?&sh=1')
-    test.start()
-#    url = r'http:\\/\\/d.pcs.baidu.com\\/file\\/37c58125068409bf538e3321e5e46d57?fid=70461429-250528-411324025&time=1378180505&sign=FDTAR-DCb740ccc5511e5e8fedcff06b081203-3NAzG54nN2g4PguqNmHEwQ32iHc%3D&rt=sh&expires=8h&r=433090167&sh=1'
-#    url = url.replace(r'\\/', r'/')
-#    print url
-    #print "downloading with urllib"
-    #urllib.urlretrieve(url, "code.zip")
+    #print GetDownloadPath(1000000000)
+    test = EazDownload('http://pan.baidu.com/share/link?shareid=2423534928&uk=70461429', \
+        r'http:\\\\/\\\\/d\.pcs\.baidu\.com\\\\/file\\\\/37c58125068409bf538e3321e5e46d57\?fid=.*?&sh=1', None)
+    if test.get_file_info():
+        test.download_file(os.path.join(test.GetDownloadPath(),'os.eaz'))
