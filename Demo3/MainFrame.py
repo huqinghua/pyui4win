@@ -80,22 +80,7 @@ class MainFrame(PyFrameBase):
             else:
                 self.ProgressDownload.pControl.SetBorderColor(0)
                 self.progress_color = 0
-#            self.progress = self.progress + 1
-#            if self.progress >= 100:
-#                if self.os == WIN7:
-#                    self.LabelUIDescription.SetText('已经准备好安装 Win7 系统到您的计算机')
-#                else:
-#                    self.LabelUIDescription.SetText('已经准备好安装 XP 系统到您的计算机')
-#                self.ButtonUIReboot.SetVisible(True)
-#                self.ContainerUIStep1.SetVisible(False)
-#                self.ContainerUIStep2.SetVisible(False)
-#                self.ContainerUIStep3.SetVisible(True)
-#                #PyWinUtils().KillTimer(self.GetHWnd(), 2)
-#                self.KillTimer(2)
-#            else:
-#                self.ProgressDownload.SetValue(self.progress)
-#                self.LabelWaiting.SetText('正在下载，请耐心等待(%d/100)' % self.progress)
-#        pass
+
 
     def show_progress(self, downloaded, total):
         self.LabelWaiting.SetText('已经下载( %.1f / %.1f MB)，请耐心等待...'%(float(downloaded)/1024/1024, float(total)/1024/1024))
@@ -158,7 +143,7 @@ class MainFrame(PyFrameBase):
                 t.start()
 
             elif sendor == "ButtonUIReboot":
-                pass
+                UICommon.ShowMessageBox(self.GetHWnd(), '准备安装', '重启安装部分未实现，请耐心等待...')
             elif sendor == "adv1":
                 pass
             elif sendor == "adv2":
