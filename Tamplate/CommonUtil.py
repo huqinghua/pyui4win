@@ -10,11 +10,18 @@ class CommonUtils():
 
     @classmethod
     def SaveExePath(cls):
-        cls.exeRoot = os.path.abspath(os.curdir)
+        #cls.exeRoot = os.path.abspath(os.curdir)
+        cls.exeRoot = os.getcwd()
 
     @classmethod
     def ReverseToExePath(cls):
         os.chdir(cls.exeRoot)
+
+    @classmethod
+    def GetExePath(cls):
+        if cls.exeRoot == '':
+            cls.exeRoot = os.getcwd()
+        return cls.exeRoot
 
 def Debug(msg):
     if CommonUtils.bDebug:
