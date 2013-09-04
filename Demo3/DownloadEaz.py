@@ -18,7 +18,7 @@ except Exception, e:
 from ctypes import c_ulong, byref, windll
 
 mylock = threading.RLock()
-THREAD_COUNT = 5
+THREAD_COUNT = 4
 
 def PyThreadDownloadEazFragment(PyClassInstance, url, start_pos, end_pos, f):
     try:
@@ -73,6 +73,12 @@ class EazDownload():
             return False
 
     def download(self, download_url, start_pos, end_pos, f):
+        for i in range(5):
+            if self.do_download(download_url, start_pos, end_pos, f):
+                return True
+        return False
+
+    def do_download(self, download_url, start_pos, end_pos, f):
         opener = urllib2.build_opener()
         request = urllib2.Request(download_url)
         request.get_method = lambda: 'HEAD'
