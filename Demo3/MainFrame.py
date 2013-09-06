@@ -87,6 +87,9 @@ class MainFrame(PyFrameBase):
                 self.progress_color = 0
 
     def show_progress(self):
+        if self.download.has_error():
+            self.download.stop()
+            return
         self.LabelWaiting.SetText('已经下载( %.1f / %.1f MB)，请耐心等待...'%(float(self.download.get_all_download_bytes())/1024/1024, float(self.eazfile_size)/1024/1024))
         percent = (self.download.get_all_download_bytes()*100)/self.eazfile_size
         if self.percent < percent:

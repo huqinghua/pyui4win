@@ -2,7 +2,6 @@
 # __author__ = 'huqinghua'
 
 import time, os
-import urllib
 import urllib2
 import re
 import threading
@@ -18,7 +17,6 @@ except Exception, e:
 from ctypes import c_ulong, byref, windll
 
 mylock = threading.RLock()
-THREAD_COUNT = 4
 
 def PyThreadDownloadEazFragment(PyClassInstance, url, start_pos, end_pos, f):
     try:
@@ -37,6 +35,12 @@ class EazDownload():
         self.downloaded_size = 0
         self.show_progress_obj = show_progress_obj
         self.result = False
+        self.piece_count = 4
+        self.error = 0
+        self.bStop = False
+
+    def set_piece_count(self, piece_count):
+        self.piece_count = piece_count
 
     def get_download_rul(self):
         req = urllib2.Request(self.baidu_url)
@@ -76,6 +80,9 @@ class EazDownload():
         for i in range(5):
             if self.do_download(download_url, start_pos, end_pos, f):
                 return True
+            else:
+                time.sleep(5)
+        self.error = 1
         return False
 
     def do_download(self, download_url, start_pos, end_pos, f):
@@ -91,9 +98,10 @@ class EazDownload():
             return False
 
         try:
-            start_time = time.time()
             self.downloaded_size = 0
             while True:
+                if self.bStop:
+                    return True
                 data = response.read(1024*32)
                 if len(data) == 0:
                     break
@@ -112,13 +120,13 @@ class EazDownload():
         return True
 
     def download_file(self, file_path):
-        self.fragment_size = (self.file_size + THREAD_COUNT - 1)/ THREAD_COUNT
+        self.fragment_size = (self.file_size + self.piece_count - 1)/ self.piece_count
         self.threads = []
         self.download_objs = []
 
         f = open(file_path, 'wb')
 
-        for i in range(THREAD_COUNT):
+        for i in range(self.piece_count):
             obj = EazDownload('', '', self.show_progress_obj)
             self.download_objs.append(obj)
             self.threads.append(threading.Thread(target=PyThreadDownloadEazFragment,args=(obj, self.download_url, i * self.fragment_size,\
@@ -137,6 +145,13 @@ class EazDownload():
 
     def get_all_download_bytes(self):
         return sum(obj.downloaded_size for obj in self.download_objs)
+
+    def has_error(self):
+        return True if sum(obj.error for obj in self.download_objs)>0 else False
+
+    def stop(self):
+        for obj in self.download_objs:
+            obj.bStop = True
 
     def GetDownloadPath(self):
         for dirver in [chr(i) for i in range(ord('D'), ord('Z'))]:
