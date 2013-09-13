@@ -6,18 +6,39 @@
 #include "PyFrameUI.hpp"
 #include "PyFrameCreator.hpp"
 // control related message
-const TCHAR* const kWindowInit = _T("windowinit");
-const TCHAR* const kClick = _T("click");
-const TCHAR* const kSelectChanged = _T("selectchanged");
-const TCHAR* const kItemSelect = _T("itemselect");
-const TCHAR* const kItemActivate = _T("itemactivate");
-const TCHAR* const kItemClick = _T("itemclick");
-const TCHAR* const kTimer = _T("timer");
-const TCHAR* const kReturn = _T("return");
-const TCHAR* const kTextChanged = _T("textchanged");
-const TCHAR* const kKillFocus = _T("killfocus");
-const TCHAR* const kSetFocus = _T("setfocus");
-const TCHAR* const kValueChanged = _T("valuechanged");
+#define DUI_MSGTYPE_MENU                   (_T("menu"))
+#define DUI_MSGTYPE_LINK                   (_T("link"))
+
+#define DUI_MSGTYPE_TIMER                  (_T("timer"))
+#define DUI_MSGTYPE_CLICK                  (_T("click"))
+
+#define DUI_MSGTYPE_RETURN                 (_T("return"))
+#define DUI_MSGTYPE_SCROLL                 (_T("scroll"))
+
+#define DUI_MSGTYPE_DROPDOWN               (_T("dropdown"))
+#define DUI_MSGTYPE_SETFOCUS               (_T("setfocus"))
+
+#define DUI_MSGTYPE_KILLFOCUS              (_T("killfocus"))
+#define DUI_MSGTYPE_ITEMCLICK 		   	   (_T("itemclick"))
+#define DUI_MSGTYPE_TABSELECT              (_T("tabselect"))
+
+#define DUI_MSGTYPE_ITEMSELECT 		   	   (_T("itemselect"))
+#define DUI_MSGTYPE_ITEMEXPAND             (_T("itemexpand"))
+#define DUI_MSGTYPE_WINDOWINIT             (_T("windowinit"))
+#define DUI_MSGTYPE_BUTTONDOWN 		   	   (_T("buttondown"))
+#define DUI_MSGTYPE_MOUSEENTER			   (_T("mouseenter"))
+#define DUI_MSGTYPE_MOUSELEAVE			   (_T("mouseleave"))
+
+#define DUI_MSGTYPE_TEXTCHANGED            (_T("textchanged"))
+#define DUI_MSGTYPE_HEADERCLICK            (_T("headerclick"))
+#define DUI_MSGTYPE_ITEMDBCLICK            (_T("itemdbclick"))
+#define DUI_MSGTYPE_SHOWACTIVEX            (_T("showactivex"))
+
+#define DUI_MSGTYPE_ITEMCOLLAPSE           (_T("itemcollapse"))
+#define DUI_MSGTYPE_ITEMACTIVATE           (_T("itemactivate"))
+#define DUI_MSGTYPE_VALUECHANGED           (_T("valuechanged"))
+
+#define DUI_MSGTYPE_SELECTCHANGED 		   (_T("selectchanged"))
 
 const TCHAR* const kCloseButtonControlName = _T("closebtn");
 const TCHAR* const kMinButtonControlName = _T("minbtn");
@@ -126,38 +147,43 @@ void PyFrameUI::OnPrepare(TNotifyUI& msg)
 
 void PyFrameUI::Notify(TNotifyUI& msg)
 {
-	if (_tcsicmp(msg.sType, kWindowInit) == 0)
+	if (_tcsicmp(msg.sType, DUI_MSGTYPE_WINDOWINIT) == 0)
 	{
 		OnPrepare(msg);
 	}
-	else if (_tcsicmp(msg.sType, kClick) == 0)
-	{
-		if (_tcsicmp(msg.pSender->GetName(), kCloseButtonControlName) == 0)
-		{
-			OnExit(msg);
-		}
-		else if (_tcsicmp(msg.pSender->GetName(), kMinButtonControlName) == 0)
-		{
-			SendMessage(WM_SYSCOMMAND, SC_MINIMIZE, 0);
-		}
-		else if (_tcsicmp(msg.pSender->GetName(), kMaxButtonControlName) == 0)
-		{
-			SendMessage(WM_SYSCOMMAND, SC_MAXIMIZE, 0);
-		}
-		else if (_tcsicmp(msg.pSender->GetName(), kRestoreButtonControlName) == 0)
-		{
-			SendMessage(WM_SYSCOMMAND, SC_RESTORE, 0);
-		}
-		else
-		{
-			CString nameA = msg.pSender->GetName();
-			CString typeA = msg.sType;
-			return m_frame->OnNotify((LPCSTR)nameA, (LPCSTR)typeA, msg.wParam, msg.lParam);
-		}
-	}
-	else if (_tcsicmp(msg.sType, kTimer) == 0)
+	else if (_tcsicmp(msg.sType, DUI_MSGTYPE_TIMER) == 0)
 	{
 		return OnTimer(msg);
+	}
+	else
+	{
+		if (_tcsicmp(msg.sType, DUI_MSGTYPE_CLICK) == 0)
+		{
+			if (_tcsicmp(msg.pSender->GetName(), kCloseButtonControlName) == 0)
+			{
+				OnExit(msg);
+				return;
+			}
+			else if (_tcsicmp(msg.pSender->GetName(), kMinButtonControlName) == 0)
+			{
+				SendMessage(WM_SYSCOMMAND, SC_MINIMIZE, 0);
+				return;
+			}
+			else if (_tcsicmp(msg.pSender->GetName(), kMaxButtonControlName) == 0)
+			{
+				SendMessage(WM_SYSCOMMAND, SC_MAXIMIZE, 0);
+				return;
+			}
+			else if (_tcsicmp(msg.pSender->GetName(), kRestoreButtonControlName) == 0)
+			{
+				SendMessage(WM_SYSCOMMAND, SC_RESTORE, 0);
+				return;
+			}
+		}
+
+		CString nameA = msg.pSender->GetName();
+		CString typeA = msg.sType;
+		return m_frame->OnNotify((LPCSTR)nameA, (LPCSTR)typeA, msg.wParam, msg.lParam);
 	}
 }
 
