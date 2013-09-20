@@ -15,6 +15,8 @@ PyFrameCreator::PyFrameCreator() : m_pyFrameUI(NULL)
 
 PyFrameCreator::~PyFrameCreator()
 {
+	if (!m_pyFrameUI)
+		delete m_pyFrameUI;
 }
 
 object PyFrameCreator::PyCreateWindow(ULONG hParent, LPCSTR pyModule, LPCSTR pyClassName, LPCSTR pyFormCaption, DWORD dwStyle, DWORD dwExStyle)
