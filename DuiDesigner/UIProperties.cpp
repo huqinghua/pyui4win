@@ -526,18 +526,18 @@ void CUIProperties::InitPropList()
 	pPropColor->EnableAutomaticButton(_T("默认"),::GetSysColor(COLOR_3DFACE));
 	pPropUI->AddSubItem(pPropColor);
 
-	pPropColor=new CMFCPropertyGridColorProperty(_T("BkColor2"),(LONG)RGB(0,0,0),NULL,_T("指定控件的背景颜色2"),tagBkColor2);//bkcolor2
+	pPropColor=new CMFCPropertyGridColor32Property(_T("BkColor2"),(LONG)ARGB(0,0,0,0),NULL,_T("指定控件的背景颜色2"),tagBkColor2);//bkcolor2
 	pPropColor->EnableOtherButton(_T("其他..."));
 	pPropColor->EnableAutomaticButton(_T("默认"),::GetSysColor(COLOR_3DFACE));
 	pPropUI->AddSubItem(pPropColor);
 
-	pPropColor=new CMFCPropertyGridColorProperty(_T("BorderColor"),(LONG)RGB(0,0,0),NULL,_T("指定控件的边框颜色"),tagBorderColor);//bordercolor
+	pPropColor=new CMFCPropertyGridColor32Property(_T("BorderColor"),(LONG)ARGB(0,0,0,0),NULL,_T("指定控件的边框颜色"),tagBorderColor);//bordercolor
 	pPropColor->EnableOtherButton(_T("其他..."));
 	pPropColor->EnableAutomaticButton(_T("默认"),::GetSysColor(COLOR_3DFACE));
 	pPropUI->AddSubItem(pPropColor);
 
 	//focusbordercolor
-	pPropColor=new CMFCPropertyGridColorProperty(_T("focusbordercolor"),(LONG)RGB(0,0,0),NULL,_T("指定控件边框获得焦点时边框的颜色"),tagFocusBorderColor);
+	pPropColor=new CMFCPropertyGridColor32Property(_T("focusbordercolor"),(LONG)ARGB(0,0,0,0),NULL,_T("指定控件边框获得焦点时边框的颜色"),tagFocusBorderColor);
 	pPropColor->EnableOtherButton(_T("其他..."));
 	pPropColor->EnableAutomaticButton(_T("默认"),::GetSysColor(COLOR_3DFACE));
 	pPropUI->AddSubItem(pPropColor);
@@ -1547,17 +1547,17 @@ void CUIProperties::ShowControlProperty(CControlUI* pControl)
 	pPropControl->GetSubItem(tagBkImage-tagControl)->SetValue((_variant_t)pControl->GetBkImage());
 	pPropControl->GetSubItem(tagBkImage-tagControl)->SetOriginalValue((_variant_t)pControl->GetBkImage());
 	//bkcolor
-	static_cast<CMFCPropertyGridColor32Property*>(pPropControl->GetSubItem(tagBkColor-tagControl))->SetColor((_variant_t)(LONG)(pControl->GetBkColor()));
-	static_cast<CMFCPropertyGridColor32Property*>(pPropControl->GetSubItem(tagBkColor-tagControl))->SetOriginalValue((_variant_t)(LONG)(pControl->GetBkColor()));
+	static_cast<CMFCPropertyGridColor32Property*>(pPropControl->GetSubItem(tagBkColor-tagControl))->SetColor(DUIARGB(pControl->GetBkColor()));
+	static_cast<CMFCPropertyGridColor32Property*>(pPropControl->GetSubItem(tagBkColor-tagControl))->SetOriginalValue((_variant_t)(LONG)DUIARGB(pControl->GetBkColor()));
 	//bkcolor2
-	static_cast<CMFCPropertyGridColor32Property*>(pPropControl->GetSubItem(tagBkColor2-tagControl))->SetColor((_variant_t)(LONG)(pControl->GetBkColor2()));
-	static_cast<CMFCPropertyGridColor32Property*>(pPropControl->GetSubItem(tagBkColor2-tagControl))->SetOriginalValue((_variant_t)(LONG)(pControl->GetBkColor2()));
+	static_cast<CMFCPropertyGridColor32Property*>(pPropControl->GetSubItem(tagBkColor2-tagControl))->SetColor(DUIARGB(pControl->GetBkColor2()));
+	static_cast<CMFCPropertyGridColor32Property*>(pPropControl->GetSubItem(tagBkColor2-tagControl))->SetOriginalValue((_variant_t)(LONG)DUIARGB(pControl->GetBkColor2()));
 	//bordercolor
-	static_cast<CMFCPropertyGridColor32Property*>(pPropControl->GetSubItem(tagBorderColor-tagControl))->SetColor((_variant_t)(LONG)(pControl->GetBorderColor()));
-	static_cast<CMFCPropertyGridColor32Property*>(pPropControl->GetSubItem(tagBorderColor-tagControl))->SetOriginalValue((_variant_t)(LONG)(pControl->GetBorderColor()));
+	static_cast<CMFCPropertyGridColor32Property*>(pPropControl->GetSubItem(tagBorderColor-tagControl))->SetColor(DUIARGB(pControl->GetBorderColor()));
+	static_cast<CMFCPropertyGridColor32Property*>(pPropControl->GetSubItem(tagBorderColor-tagControl))->SetOriginalValue((_variant_t)(LONG)DUIARGB(pControl->GetBorderColor()));
 	//focusbordercolor
-	static_cast<CMFCPropertyGridColor32Property*>(pPropControl->GetSubItem(tagFocusBorderColor-tagControl))->SetColor((_variant_t)(LONG)(pControl->GetFocusBorderColor()));
-	static_cast<CMFCPropertyGridColor32Property*>(pPropControl->GetSubItem(tagFocusBorderColor-tagControl))->SetOriginalValue((_variant_t)(LONG)(pControl->GetFocusBorderColor()));
+	static_cast<CMFCPropertyGridColor32Property*>(pPropControl->GetSubItem(tagFocusBorderColor-tagControl))->SetColor(DUIARGB(pControl->GetFocusBorderColor()));
+	static_cast<CMFCPropertyGridColor32Property*>(pPropControl->GetSubItem(tagFocusBorderColor-tagControl))->SetOriginalValue((_variant_t)(LONG)DUIARGB(pControl->GetFocusBorderColor()));
 	//bordersize
 	pPropControl->GetSubItem(tagBorderSize-tagControl)->SetValue((_variant_t)(LONG)pControl->GetBorderSize());
 	pPropControl->GetSubItem(tagBorderSize-tagControl)->SetOriginalValue((_variant_t)(LONG)pControl->GetBorderSize());
