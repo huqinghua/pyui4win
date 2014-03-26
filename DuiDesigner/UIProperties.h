@@ -3,7 +3,7 @@
 //////////////////////////////////////////////////////////////////////////
 //CMFCPropertyGridColor32Property
 
-#define DUIARGB(argb)        (COLORREF)RGB(GetBValue(argb), GetGValue(argb), GetRValue(argb))
+#define DUIARGB(argb)        ((COLORREF)(((argb) & 0xFF000000) | RGB(GetBValue(argb), GetGValue(argb), GetRValue(argb))))
 #define ARGB(a,r,g,b)        ((COLORREF)(((BYTE)(r)|((WORD)((BYTE)(g))<<8))|(((DWORD)(BYTE)(b))<<16))|(((DWORD)(BYTE)(a))<<24))
 #define GetAValue(argb)      (LOBYTE((argb)>>24))
 
