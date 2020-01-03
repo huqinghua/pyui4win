@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<Window size="549,389" caption="0,0,0,60">
+    <Font name="微软雅黑" size="19" bold="false" italic="false" />
+    <Font name="微软雅黑" size="16" bold="false" italic="false" />
+    <Font name="微软雅黑" size="14" bold="false" italic="false" />
+    <VerticalLayout width="549" height="389" bkimage="vistabg.png">
+        <Container width="549" height="60">
+            <Label name="LblCaption" text="Python界面开发" float="true" pos="12,13,0,0" width="194" height="29" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" font="1" />
+            <Button name="BtnClose" tooltip="退出程序" float="true" pos="522,0,0,0" width="27" height="22" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" normalimage="file=&apos;sys_button_close.png&apos; source=&apos;27,0,53,22&apos;" hotimage="file=&apos;sys_button_close.png&apos; source=&apos;54,0,80,22&apos;" />
+        </Container>
+        <Container width="549" height="272">
+            <Text name="txtMsg" text="要提示的信息" bordersize="1" float="true" pos="52,30,0,0" width="441" height="214" bordercolor="#00008000" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" font="2" align="wrap" />
+        </Container>
+        <Container width="549">
+            <Button name="btnOK" text="确定" float="true" pos="436,13,0,0" width="98" height="33" textcolor="#00FFFBF0" disabledtextcolor="#FFA7A6AA" font="1" align="center" normalimage="reboot.png" hotimage="file=&apos;reboot-hot.png&apos; corner=&apos;20,20,20,20&apos;" pushedimage="reboot.png" focusedimage="reboot.png" />
+        </Container>
+    </VerticalLayout>
+</Window>

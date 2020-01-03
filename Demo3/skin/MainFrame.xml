@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<Window size="1024,576" caption="0,0,0,60">
+    <Font name="微软雅黑" size="19" bold="false" italic="false" />
+    <Font name="微软雅黑" size="16" bold="false" italic="false" />
+    <Font name="微软雅黑" size="14" bold="false" italic="false" />
+    <VerticalLayout name="VerticalLayoutUI1" width="427" height="153" bkimage="vistabg.png">
+        <Container name="ContainerUITitle" width="1022" height="114">
+            <Label name="LabelUIDescription" text="您想安装哪个系统 ?" float="true" pos="141,48,0,0" width="618" height="66" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" font="0" />
+            <Button name="closebtn" tooltip="退出程序" float="true" pos="989,0,0,0" width="27" height="22" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" normalimage="file=&apos;sys_button_close.png&apos; source=&apos;27,0,53,22&apos;" hotimage="file=&apos;sys_button_close.png&apos; source=&apos;54,0,80,22&apos;" />
+            <Label name="LabelUI6" text="小妞会装机" float="true" pos="63,18,0,0" width="279" height="23" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" font="1" />
+            <Label name="LabelUI4" float="true" pos="10,7,0,0" width="48" height="48" bkimage="xiaoniu48.png" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+        </Container>
+        <Container name="ContainerUIStep2" width="1023" height="291" visible="false">
+            <Label name="LabelUIOS" float="true" pos="416,50,0,0" width="182" height="137" bkimage="file=&apos;win7.jpg&apos; hole=&apos;true&apos;" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+            <Progress name="ProgressDownload" float="true" pos="195,220,0,0" width="603" height="33" bordersize="1" bordercolor="#00008000" focusbordercolor="#000000FF" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" foreimage="progress.png" min="0" max="100" value="20" hor="true" />
+            <Label name="LabelWaiting" text="已经下载20%, 请耐心等待..." float="true" pos="416,221,0,0" width="373" height="30" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+            <Button name="BtnDownloadTooSlow" text="{u}{l}下载太慢？让下载飞起来！{/l}{/u}" float="true" pos="195,262,0,0" width="398" height="22" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="left"/>
+        </Container>
+        <Container name="ContainerUIStep1" width="1023" height="291">
+            <Button name="BtnWin7" tooltip="点击安装win 7" float="true" pos="587,68,0,0" width="182" height="137" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" normalimage="win7.jpg" hotimage="win7-hot.jpg" pushedimage="win7-push.jpg" />
+            <Button name="BtnXP" tooltip="点击安装xp" float="true" pos="260,68,0,0" width="182" height="137" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" normalimage="xp.jpg" hotimage="xp-hot.jpg" pushedimage="xp-push.jpg" />
+            <Label name="LabelUI5" text="将鼠标移动到您想安装的系统桌面图像上并点击。" float="true" pos="139,241,0,0" width="662" height="24" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" font="2" />
+            <Label name="LabelUI2" text="XP: 流行了10年的经典系统" float="true" pos="262,30,0,0" width="181" height="27" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" font="2" />
+            <Label name="LabelUI3" text="Win 7: 更炫的新系统" float="true" pos="589,30,0,0" width="269" height="30" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" font="2" />
+        </Container>
+        <Container name="ContainerUIStep3" width="1023" height="291" visible="false">
+            <Label name="LabelUI12" float="true" pos="366,2,0,0" width="256" height="256" bkimage="Vista.png" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+            <Label name="LabelUI11" text="下载已经完成。按开始安装按钮开始安装。安装过程中会自动重启动计算机。" float="true" pos="139,245,0,0" width="662" height="24" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" font="2" />
+        </Container>
+        <Container name="ContainerUIBottom" width="1023" height="169">
+            <Button name="ButtonUIReboot" visible="false" text="开始安装" float="true" pos="310,44,0,0" width="387" height="53" textcolor="#00FFFBF0" disabledtextcolor="#FFA7A6AA" font="0" align="center" normalimage="reboot.png" hotimage="reboot-hot.png" pushedimage="reboot.png" focusedimage="reboot.png" />
+            <Button name="adv1" visible="false" float="true" pos="19,15,0,0" width="181" height="143" bordercolor="#0000FF00" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" />
+			<Button name="adv2" visible="false" float="true" pos="219,15,0,0" width="181" height="143" bordercolor="#0000FF00" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" />
+			<Button name="adv3" visible="false" float="true" pos="419,15,0,0" width="181" height="143" bordercolor="#0000FF00" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" />
+			<Button name="adv4" visible="false" float="true" pos="619,15,0,0" width="181" height="143" bordercolor="#0000FF00" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" />
+			<Button name="adv5" visible="false" float="true" pos="819,15,0,0" width="181" height="143" bordercolor="#0000FF00" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" />
+		</Container>
+    </VerticalLayout>
+</Window>
