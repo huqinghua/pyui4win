@@ -42,3 +42,4 @@ Release
 Debug_*
 Release_*
 *.ncb
+*.suo
