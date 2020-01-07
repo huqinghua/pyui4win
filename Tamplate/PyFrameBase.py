@@ -1,9 +1,17 @@
-__author__ = 'hqh'
 # coding=gbk
+__author__ = 'hqh'
 
 import string, time
-from PyUI import *
-from PyDui import *
+import traceback
+from PyUI import PyWinUtils
+from PyUI import PyUIFactory
+from PyUI import PyUICast
+from PyUI import PyUIBase
+from PyUI import PyLog
+from PyUI import PyFrameCreator
+import win32con
+
+
 
 DUI_MSGTYPE_MENU = "menu"
 DUI_MSGTYPE_LINK = "link"
@@ -38,6 +46,263 @@ DUI_MSGTYPE_ITEMACTIVATE = "itemactivate"
 DUI_MSGTYPE_VALUECHANGED = "valuechanged"
 
 DUI_MSGTYPE_SELECTCHANGED = "selectchanged"
+
+
+class PyControlUI():
+    def __init__(self, pControl):
+        self.pControl = pControl
+    def SetName(self, name):
+        self.pControl.SetName(name)
+    def GetName(self):
+        return self.pControl.GetName()
+    def GetClass(self):
+        return self.pControl.GetClass()
+    def GetControlFlags(self):
+        return self.pControl.GetControlFlags()
+    def Activate(self):
+        return self.pControl.Activate()
+    def GetParent(self):
+        return self.pControl.GetParent()
+    def SetText(self,txt):
+        return self.pControl.SetText(txt)
+    def GetText(self):
+        return self.pControl.GetText()
+    def SetAttribute(self, attr, value):
+        return self.pControl.SetAttribute(attr, value)
+    def IsVisible(self):
+        return self.pControl.IsVisible()
+    def SetVisible(self, bVisable):
+        return self.pControl.SetVisible(bVisable)
+    def SetInternVisible(self, bVisable):
+        return self.pControl.SetInternVisible(bVisable)
+    def IsEnabled(self):
+        return self.pControl.IsEnabled()
+    def SetEnabled(self, bEnable):
+        return self.pControl.SetEnabled(bEnable)
+    def IsFocused(self):
+        return self.pControl.IsFocused()
+    def SetFocus(self):
+        return self.pControl.SetFocus()
+    def GetPos(self):
+        return self.pControl.GetPos()
+    def SetPos(self, pos):
+        return self.pControl.SetPos(pos)
+    def ApplyAttributeList(self, attrs):
+        return self.pControl.ApplyAttributeList(attrs)
+    def Invalidate(self):
+        return self.pControl.Invalidate()
+    def IsUpdateNeeded(self):
+        return self.pControl.IsUpdateNeeded()
+    def NeedUpdate(self):
+        return self.pControl.NeedUpdate()
+    def NeedParentUpdate(self):
+        return self.pControl.NeedParentUpdate()
+    def SetBkImage(self, img):
+        return self.pControl.SetBkImage(img)
+
+class PyContainerUI(PyControlUI):
+    def __init__(self, pControl):
+        PyControlUI.__init__(self, pControl)
+    def GetItemAt(self, index):
+        return self.pControl.GetItemAt(index)
+    def GetItemIndex(self, control):
+        return self.pControl.GetItemIndex(control.pControl)
+    def SetItemIndex(self, control, index):
+        return self.pControl.SetItemIndex(control.pControl, index)
+    def GetCount(self):
+        return self.pControl.GetCount()
+    def Add(self, control):
+        return self.pControl.Add(control.pControl)
+    def AddAt(self, control, index):
+        return self.pControl.AddAt(control.pControl, index)
+    def RemoveAll(self):
+        return self.pControl.RemoveAll()
+    def Remove(self, control):
+        return self.pControl.Remove(control.pControl)
+    def RemoveAt(self, index):
+        return self.pControl.RemoveAt(index)
+
+class PyLabelUI(PyControlUI):
+    def __init__(self, pControl):
+        PyControlUI.__init__(self, pControl)
+    def IsShowHtml(self):
+        return self.pControl.IsShowHtml()
+    def SetShowHtml(self, bShowHtml):
+        return self.pControl.SetShowHtml(bShowHtml)
+
+class PyAnimationUI(PyControlUI):
+    def __init__(self, pControl):
+        PyControlUI.__init__(self, pControl)
+    def StartAnimation(self):
+        return self.pControl.StartAnimation()
+    def StopAnimation(self):
+        return self.pControl.StopAnimation()
+
+class PyButtonUI(PyLabelUI):
+    def __init__(self, pControl):
+        PyLabelUI.__init__(self, pControl)
+    def IsShowHtml(self):
+        return self.pControl.IsShowHtml()
+    def SetShowHtml(self, bShowHtml):
+        return self.pControl.SetShowHtml(bShowHtml)
+
+class PyProgressUI(PyLabelUI):
+    def __init__(self, pControl):
+        PyLabelUI.__init__(self, pControl)
+    def GetValue(self):
+        return self.pControl.GetValue()
+    def SetValue(self, value):
+        return self.pControl.SetValue(value)
+    def GetMinValue(self):
+        return self.pControl.GetMinValue()
+    def SetMinValue(self, value):
+        return self.pControl.SetMinValue(value)
+    def GetMaxValue(self):
+        return self.pControl.GetMaxValue()
+    def SetMaxValue(self, value):
+        return self.pControl.SetMaxValue(value)
+
+class PyEditUI(PyLabelUI):
+    def __init__(self, pControl):
+        PyLabelUI.__init__(self, pControl)
+    def GetMaxChar(self):
+        return self.pControl.GetMaxChar()
+    def SetMaxChar(self, value):
+        return self.pControl.SetMaxChar(value)
+    def IsReadOnly(self):
+        return self.pControl.IsReadOnly()
+    def SetReadOnly(self, value):
+        return self.pControl.SetReadOnly(value)
+    def IsPasswordMode(self):
+        return self.pControl.IsPasswordMode()
+    def SetPasswordMode(self, value):
+        return self.pControl.SetPasswordMode(value)
+    def GetPasswordChar(self):
+        return self.pControl.GetPasswordChar()
+    def SetPasswordChar(self, value):
+        return self.pControl.SetPasswordChar(value)
+    def IsNumberOnly(self):
+        return self.pControl.IsNumberOnly()
+    def SetNumberOnly(self, value):
+        return self.pControl.SetNumberOnly(value)
+    def GetWindowStyls(self):
+        return self.pControl.GetWindowStyls()
+
+class PyTextUI(PyLabelUI):
+    def __init__(self, pControl):
+        PyLabelUI.__init__(self, pControl)
+    def GetLinkContent(self, index):
+        return self.pControl.GetLinkContent(index)
+
+class PyOptionUI(PyButtonUI):
+    def __init__(self, pControl):
+        PyButtonUI.__init__(self, pControl)
+    def IsSelected(self):
+        return self.pControl.IsSelected()
+    def Selected(self, bSelected):
+        return self.pControl.Selected(bSelected)
+    def GetGroup(self):
+        return self.pControl.GetGroup()
+    def SetGroup(self, group):
+        return self.pControl.SetGroup(group)
+
+class PyCheckBoxUI(PyOptionUI):
+    def __init__(self, pControl):
+        PyOptionUI.__init__(self, pControl)
+    def GetCheck(self):
+        return self.pControl.GetCheck()
+    def SetCheck(self, bSelected):
+        return self.pControl.SetCheck(bSelected)
+
+class PyComboUI(PyContainerUI):
+    def __init__(self, pControl):
+        PyContainerUI.__init__(self, pControl)
+    def GetDropBoxAttributeList(self):
+        return self.pControl.GetDropBoxAttributeList()
+    def SetDropBoxAttributeList(self, attrs):
+        return self.pControl.SetDropBoxAttributeList(attrs)
+    def GetCurSel(self):
+        return self.pControl.GetCurSel()
+    def SelectItem(self, iIndex, bTakeFocus):
+        return self.pControl.SelectItem(iIndex, bTakeFocus)
+
+class PyRichEditUI(PyContainerUI):
+    def __init__(self, pControl):
+        PyContainerUI.__init__(self, pControl)
+    def SetSelAll(self):
+        return self.pControl.SetSelAll()
+    def SetSelNone(self):
+        return self.pControl.SetSelNone()
+    def GetSelText(self):
+        return self.pControl.GetSelText()
+    def AppendText(self):
+        return self.pControl.AppendText()
+
+class PyHorizontalLayoutUI(PyContainerUI):
+    def __init__(self, pControl):
+        PyContainerUI.__init__(self, pControl)
+
+class PyVerticalLayoutUI(PyContainerUI):
+    def __init__(self, pControl):
+        PyContainerUI.__init__(self, pControl)
+
+class PyTabLayoutUI(PyContainerUI):
+    def __init__(self, pControl):
+        PyContainerUI.__init__(self, pControl)
+    def GetCurSel(self):
+        return self.pControl.GetCurSel()
+    def SelectItem(self, attrs):
+        return self.pControl.SelectItem(attrs)
+
+class PyListUI(PyVerticalLayoutUI):
+    def __init__(self, pControl):
+        PyVerticalLayoutUI.__init__(self, pControl)
+    def GetCount(self):
+        return self.pControl.GetCount()
+
+class PyListContainerElementUI(PyContainerUI):
+    def __init__(self, pControl):
+        PyContainerUI.__init__(self, pControl)
+    def GetIndex(self):
+        return self.pControl.GetIndex()
+    def SetIndex(self, index):
+        return self.pControl.SetIndex(index)
+    def IsSelected(self):
+        return self.pControl.IsSelected()
+    def SetOwner(self, owner):
+        return self.pControl.SetOwner(owner)
+    def Select(self, bSelect):
+        return self.pControl.Select(bSelect)
+    
+class PyWebBrowserUI(PyControlUI):
+    def __init__(self, pControl):
+        self.pControl = pControl
+    def NavigateUrl(self, url):
+        self.pControl.NavigateUrl(url)
+    def Navigate2(self, url):
+        self.pControl.Navigate2(url)
+    def Refresh(self):
+        self.pControl.Refresh()
+    def Refresh2(self, level):
+        self.pControl.Refresh2(level)
+    def GoBack(self):
+        self.pControl.GoBack()
+    def GoForward(self):
+        self.pControl.GoForward()
+    def SetHomePage(self, url):
+        self.pControl.SetHomePage(url)
+    def GetHomePage(self):
+        return self.pControl.GetHomePage()
+    def NavigateHomePage(self):
+        self.pControl.NavigateHomePage()
+    def DoCreateControl(self):
+        return self.pControl.DoCreateControl()
+    def SetWebBrowserEventHandler(self, handler):
+        self.pControl.SetWebBrowserEventHandler(handler)
+    def FocusHostWnd(self):
+        self.pControl.FocusHostWnd()
+    def CallJs(self, params):
+        self.pControl.CallJs(params)
 
 class PyFrameBase(PyUIBase):
     def __init__(self):
@@ -142,56 +407,167 @@ class PyFrameBase(PyUIBase):
     def PyCast2ListContainerElement(self, control):
         return PyListContainerElementUI(PyUICast.castListContainerElementUI(control))
         
+    def SecurePrint(self, msg, logText=True):
+        """
+        SecurePrint
+        """
+        try:
+            newline = str(msg)
+            if isinstance(newline, unicode):
+                newline = newline.encode("gb2312")
+            if logText:
+                PyLog().LogText(newline)
+            # print(msg)
+        except:
+            pass
+            
     #virtual void OnFinalMessage(HWND hWnd);
     def OnFinalMessage(self, hWnd):
-#        PyLog().LogText( 'OnFinalMessage()')
-        pass
+        return 0
 
     #virtual void InitWindow();
     def InitWindow(self):
-#        PyLog().LogText( 'InitWindow()')
-        pass
+        return 0
+
+    #virtual LRESULT OnClose(UINT uMsg, WPARAM wParam, LPARAM lParam);
+    def OnClose(self, uMsg, wParam, lParam):
+        try:
+            return self.OnCloseInternal(uMsg, wParam, lParam)
+        except:
+            self.SecurePrint(traceback.format_exc()) 
+            pass
+
+        return 0
 
     #virtual LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
     def HandleMessage(self, uMsg, wParam, lParam):
-#        PyLog().LogText( 'HandleMessage()')
+        try:
+            return self.HandleMessageInternal(uMsg, wParam, lParam)
+        except:
+            self.SecurePrint(traceback.format_exc()) 
+            pass
+
         return 0
 
     #virtual LRESULT HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
     def HandleCustomMessage(self, uMsg, wParam, lParam):
-#        PyLog().LogText( 'HandleCustomMessage()')
-        if uMsg == 0x0113:
-            self.OnCustomTimer(wParam, lParam)
-#            pass
-#            PyLog().LogText( 'HandleCustomMessage(WM_TIMER)')
+        try:
+            return self.HandleCustomMessageInternal(uMsg, wParam, lParam)
+        except:
+            self.SecurePrint(traceback.format_exc()) 
+            pass
+
         return 0
 
     #virtual void OnPrepare(LPCSTR sendor, WPARAM wParam, LPARAM lParam);
     def OnPrepare(self, sendor, wParam, lParam):
-#        PyLog().LogText( 'OnPrepare()')
-        pass
+        try:
+            return self.OnPrepareInternal(sendor, wParam, lParam)
+        except:
+            self.SecurePrint(traceback.format_exc()) 
+            pass
 
-    #virtual void OnExit(LPCSTR sendor, WPARAM wParam, LPARAM lParam);
-    def OnExit(self, sendor, wParam, lParam):
-#        PyLog().LogText( 'OnExit()')
-        pass
+        return 0
+
+    # #virtual void OnExit(LPCSTR sendor, WPARAM wParam, LPARAM lParam);
+    # def OnExit(self, sendor, wParam, lParam):
+    #     try:
+    #         return self.OnExitInternal(sendor, wParam, lParam)
+    #     except:
+    #         self.SecurePrint(traceback.format_exc()) 
+    #         pass
+
+    #     return 0
 
     #virtual void OnTimer(LPCSTR sendor, WPARAM wParam, LPARAM lParam);
     def OnTimer(self, sendor, wParam, lParam):
-#        PyLog().LogText( 'OnTimer()')
-        pass
+        try:
+            return self.OnTimerInternal(sendor, wParam, lParam)
+        except:
+            self.SecurePrint(traceback.format_exc()) 
+            pass
 
-    def OnCustomTimer(self, wParam, lParam):
-#        if wParam == 1:
-#            time.sleep(0)
-#            PyLog().LogText( 'OnCustomTimer()')
-        pass
+        return 0
+
+    #virtual LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
+    def HandleMessageInternal(self, uMsg, wParam, lParam):
+        return 0
+
+    #virtual LRESULT HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
+    def HandleCustomMessageInternal(self, uMsg, wParam, lParam):
+        return 0
+
+    #virtual void OnPrepare(LPCSTR sendor, WPARAM wParam, LPARAM lParam);
+    def OnPrepareInternal(self, sendor, wParam, lParam):
+        return 0
+
+    #virtual void OnCloseInternal(LPCSTR sendor, WPARAM wParam, LPARAM lParam);
+    def OnCloseInternal(self, sendor, wParam, lParam):
+        return 0
+
+    #virtual void OnTimer(LPCSTR sendor, WPARAM wParam, LPARAM lParam);
+    def OnTimerInternal(self, sendor, wParam, lParam):
+        return 0
+
+    def OnCustomTimerInternal(self, wParam, lParam):
+        return 0
 
     def SetTimer(self, nIDEvent, uElapse):
         PyWinUtils().SetTimer(self.GetHWnd(), nIDEvent, uElapse)
 
     def KillTimer(self, nIDEvent):
         PyWinUtils().KillTimer(self.GetHWnd(), nIDEvent)
+
+    def MinimizeWindow(self):
+        """
+        MinimizeWindow
+        """
+        PyWinUtils().SendMessageA(self.GetHWnd(), win32con.WM_SYSCOMMAND, win32con.SC_MINIMIZE, 0)
+
+    def MaximizeWindow(self):
+        """
+        MaximizeWindow
+        """
+        PyWinUtils().SendMessageA(self.GetHWnd(), win32con.WM_SYSCOMMAND, win32con.SC_MAXIMIZE, 0)
+
+    def RestoreWindow(self):
+        """
+        RestoreWindow
+        """
+        PyWinUtils().SendMessageA(self.GetHWnd(), win32con.WM_SYSCOMMAND, win32con.SC_RESTORE, 0)
+
+class MsgBox(PyFrameBase):
+    def __init__(self):
+        self.clsName = self.__class__.__name__
+        self.skinFileName = self.__class__.__name__ + '.xml'
+        #PyFrameBase.__init__(self)
+        super(MsgBox, self).__init__()
+
+    #virtual LPCSTR GetSkinFile();
+    def GetSkinFile(self):
+        return self.skinFileName
+
+    #virtual LPCSTR GetWindowClassName() const;
+    def GetWindowClassName(self):
+        return self.clsName
+
+    #virtual void OnNotify(LPCSTR sendor, LPCSTR sType, WPARAM wParam, LPARAM lParam);
+    def OnNotify(self, sendor, sType, wParam, lParam):
+        if sType == "click":
+            if sendor == "btnOK":
+                msg = "%d" % self.GetHWnd()
+                PyLog().LogText(msg)
+                self.CloseWindow()
+            elif sendor == "BtnClose":
+                self.CloseWindow()
+
+def ShowMessageBox(hwnd, title, caption):
+    mbox1 = PyFrameCreator()
+    obj = mbox1.CreateDialog(hwnd, 'MsgBox', 'MsgBox', 'MsgBox')
+    obj.SetText("LblCaption", title)
+    obj.SetText("txtMsg", caption)
+    mbox1.ShowModal()
+
 
 def GiveUp():
     #PyLog().LogText( "GiveUp")
