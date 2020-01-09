@@ -3,7 +3,7 @@ pyui4win
 
 一个用python实现业务逻辑、用xml和html/css/js描述界面的windows程序的快速开发框架
 
-原理：
+# 原理：
 
 1、界面事件和执行器发送过来的消息经过pyui4win运行环境转为pyui4win消息队列中的事件
 
