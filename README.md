@@ -12,4 +12,5 @@ pyui4win
 3、如果有对应的python例程处理，那么由python例程处理。否则由C++例程处理
 
 
-
+# 推荐实践
+用html/css/js写界面逻辑，用python写业务逻辑，简单快速
