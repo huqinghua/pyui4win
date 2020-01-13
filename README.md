@@ -28,7 +28,7 @@ pyui4win
 # 最佳实践
 项目设计的本意是用xml配置界面，python实现业务逻辑。但是在实践中，发现用html/css/js来实现界面层展现更快更酷炫，而且这样界面层和业务层逻辑更清晰。所以推荐html/css/js写界面逻辑，python实现业务逻辑。从fe来看，本地python例程是后台服务器的本地版本。
 
-js和python约定采用json格式来调用。fe暴露一个JsFun4Py函数，供python调用
+js和python约定采用json格式来调用。fe暴露一个JsFun4Py函数，供python调用。该函数是js接收python请求的总控制器
 
 python调用js例程：
 
@@ -52,6 +52,7 @@ js调用python例程，并获取json格式结果：
 
         var dd = window.external.InvokePyFun("{\"fun\": \"xxx\", \"param1\": \"yyyyy\", \"param2\":\"zzzzzzzzz\"}")
 
+与js相同，python中也存在一个处理js请求的总控制器
 
 # 简单界面实践
 除了最佳实践，也可以用界面设计器直接配置界面。界面设计器会自动生成界面处理框架代码
