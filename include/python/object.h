@@ -527,7 +527,9 @@ PyAPI_DATA(_Py_HashSecret_t) _Py_HashSecret;
 PyAPI_DATA(int) _Py_HashSecret_Initialized;
 #endif
 
-/* Helper for passing objects to printf and the like */
+/* Helper for passing objects to printf and the like.
+   Leaks refcounts.  Don't use it!
+*/
 #define PyObject_REPR(obj) PyString_AS_STRING(PyObject_Repr(obj))
 
 /* Flag bits for printing: */
@@ -776,7 +778,7 @@ PyAPI_FUNC(void) _Py_AddToAllObjects(PyObject *, int force);
     } while (0)
 
 /* Safely decref `op` and set `op` to NULL, especially useful in tp_clear
- * and tp_dealloc implementatons.
+ * and tp_dealloc implementations.
  *
  * Note that "the obvious" code can be deadly:
  *
@@ -821,6 +823,39 @@ PyAPI_FUNC(void) _Py_AddToAllObjects(PyObject *, int force);
 /* Macros to use in case the object pointer may be NULL: */
 #define Py_XINCREF(op) do { if ((op) == NULL) ; else Py_INCREF(op); } while (0)
 #define Py_XDECREF(op) do { if ((op) == NULL) ; else Py_DECREF(op); } while (0)
+
+/* Safely decref `op` and set `op` to `op2`.
+ *
+ * As in case of Py_CLEAR "the obvious" code can be deadly:
+ *
+ *     Py_DECREF(op);
+ *     op = op2;
+ *
+ * The safe way is:
+ *
+ *      Py_SETREF(op, op2);
+ *
+ * That arranges to set `op` to `op2` _before_ decref'ing, so that any code
+ * triggered as a side-effect of `op` getting torn down no longer believes
+ * `op` points to a valid object.
+ *
+ * Py_XSETREF is a variant of Py_SETREF that uses Py_XDECREF instead of
+ * Py_DECREF.
+ */
+
+#define Py_SETREF(op, op2)                      \
+    do {                                        \
+        PyObject *_py_tmp = (PyObject *)(op);   \
+        (op) = (op2);                           \
+        Py_DECREF(_py_tmp);                     \
+    } while (0)
+
+#define Py_XSETREF(op, op2)                     \
+    do {                                        \
+        PyObject *_py_tmp = (PyObject *)(op);   \
+        (op) = (op2);                           \
+        Py_XDECREF(_py_tmp);                    \
+    } while (0)
 
 /*
 These are provided as conveniences to Python runtime embedders, so that
@@ -984,16 +1019,22 @@ PyAPI_FUNC(void) _PyTrash_thread_destroy_chain(void);
 
 #define PyTrash_UNWIND_LEVEL 50
 
+/* Note the workaround for when the thread state is NULL (issue #17703) */
 #define Py_TRASHCAN_SAFE_BEGIN(op) \
     do { \
         PyThreadState *_tstate = PyThreadState_GET(); \
-        if (_tstate->trash_delete_nesting < PyTrash_UNWIND_LEVEL) { \
-            ++_tstate->trash_delete_nesting;
+        if (!_tstate || \
+            _tstate->trash_delete_nesting < PyTrash_UNWIND_LEVEL) { \
+            if (_tstate) \
+                ++_tstate->trash_delete_nesting;
             /* The body of the deallocator is here. */
 #define Py_TRASHCAN_SAFE_END(op) \
-            --_tstate->trash_delete_nesting; \
-            if (_tstate->trash_delete_later && _tstate->trash_delete_nesting <= 0) \
-                _PyTrash_thread_destroy_chain(); \
+            if (_tstate) { \
+                --_tstate->trash_delete_nesting; \
+                if (_tstate->trash_delete_later \
+                    && _tstate->trash_delete_nesting <= 0) \
+                    _PyTrash_thread_destroy_chain(); \
+            } \
         } \
         else \
             _PyTrash_thread_deposit_object((PyObject*)op); \
