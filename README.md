@@ -54,6 +54,16 @@ js调用python例程，并获取json格式结果：
 
 与js相同，python中也存在一个处理js请求的总控制器
 
+        def HandleCustomMessageInternal(self, uMsg, wParam, lParam):
+            if uMsg == WM_FROM_JS:
+                return self._HandleCommandFromJs(wParam)
+                    
+            
+        def _HandleCommandFromJs(self, wParam):
+            params = PyWinUtils().Conver2string(wParam)
+            paramsjson = json.loads(params.decode('gbk'))
+            if paramsjson['fun'] == "xxxx":
+            
 # 简单界面实践
 除了最佳实践，也可以用界面设计器直接配置界面。界面设计器会自动生成界面处理框架代码
 
