@@ -26,10 +26,37 @@ pyui4win
 在项目实践中，只需要实现python业务逻辑例程即可
 
 # 最佳实践
-项目设计的本意是用xml配置界面，python实现业务逻辑。但是在实践中，发现用html/css/js来实现界面层展现更快更酷炫，而且这样界面层和业务层逻辑更清晰。所以推荐html/css/js写界面逻辑，python实现业务逻辑。
+项目设计的本意是用xml配置界面，python实现业务逻辑。但是在实践中，发现用html/css/js来实现界面层展现更快更酷炫，而且这样界面层和业务层逻辑更清晰。所以推荐html/css/js写界面逻辑，python实现业务逻辑。从fe来看，本地python例程是后台服务器的本地版本。
+
+js和python约定采用json格式来调用。fe暴露一个JsFun4Py函数，供python调用
+
+python调用js例程：
+
+        msg = {
+        
+            'fun': "func1",
+            
+            'content': {
+            
+                'flag': 'vvvvvvvv'
+                
+            }
+            
+        }
+        
+        self.Browser.CallJs(id(msg))
+        
+其中Browser是界面中的ie webbrowser控件，CallJs是pyui4win框架对该控件的方法。
+
+js调用python例程，并获取json格式结果：
+
+        var dd = window.external.InvokePyFun("{\"fun\": \"xxx\", \"param1\": \"yyyyy\", \"param2\":\"zzzzzzzzz\"}")
+
 
 # 简单界面实践
 除了最佳实践，也可以用界面设计器直接配置界面。界面设计器会自动生成界面处理框架代码
+
+
 
 # 注意事项
 请不要用ctype方式调用windows messagebox对话框或者其他标准对话框，需要时可以使用pyui4win里面已经封装好的标准对话框，或者自己在pyui4win中做扩展。用ctype调用其它的api都没有问题。至于原因，还没有时间研究，猜测是与duilib的实现方式和ctype的实现方式有关系。期待对这个问题有研究的同学可以告诉我 :)
