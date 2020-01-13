@@ -407,7 +407,7 @@ LRESULT DuiLib::CWebBrowserUI::TranslateAccelerator( MSG *pMsg )
 	if( m_pWebBrowser2 == NULL )
         return E_NOTIMPL;
 
-    // 当前Web窗口不是焦点,不处理加速键
+    // 褰撳墠Web绐楀彛涓嶆槸鐒︾偣,涓嶅鐞嗗姞閫熼敭
     BOOL bIsChild = FALSE;
     HWND hTempWnd = NULL;
     HWND hWndFocus = ::GetFocus();
@@ -449,7 +449,7 @@ STDMETHODIMP DuiLib::CWebBrowserUI::GetDropTarget( IDropTarget* pDropTarget, IDr
 	{
 		return m_pWebBrowserEventHandler->GetDropTarget(pDropTarget,ppDropTarget);
 	}
-	return S_FALSE;	// 使用系统拖拽
+	return S_FALSE;	// 浣跨敤绯荤粺鎷栨嫿
 }
 
 STDMETHODIMP DuiLib::CWebBrowserUI::GetExternal( IDispatch** ppDispatch )
