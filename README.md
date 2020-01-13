@@ -3,7 +3,7 @@ pyui4win
 
 一个用python实现业务逻辑、用xml和html/css/js描述界面的windows程序的快速开发框架
 
-# 应用框架结构图
+# 应用框架
 ![](doc/应用框架.png)
 
 1、pyui4win根据xml/html/js/css创建界面
