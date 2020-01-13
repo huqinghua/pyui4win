@@ -71,7 +71,7 @@ STDMETHODIMP DuiLib::CWebBrowserUI::GetTypeInfo( UINT iTInfo, LCID lcid, ITypeIn
 
 STDMETHODIMP DuiLib::CWebBrowserUI::GetIDsOfNames( REFIID riid, OLECHAR **rgszNames, UINT cNames, LCID lcid,DISPID *rgDispId )
 {
-	if (wcscmp(rgszNames[0], L"InvokePy") == 0)
+	if (wcscmp(rgszNames[0], L"InvokePyFun") == 0)
 	{
 		*rgDispId = 500;
 		return S_OK;
@@ -82,7 +82,22 @@ STDMETHODIMP DuiLib::CWebBrowserUI::GetIDsOfNames( REFIID riid, OLECHAR **rgszNa
 
 void DuiLib::CWebBrowserUI::CallJs( int pystr )
 {
+	if ( pystr )
+	{
+		::OutputDebugStringA((LPCSTR)(pystr + 20));
 
+		VARIANT arg[1] = {CComVariant((LPCSTR)(pystr + 20))};//JsFun4Py(3,7)
+        VARIANT varRet;
+		try
+		{
+			InvokeMethod(GetHtmlWindow(), L"JsFun4Py", &varRet, arg, 1);
+		}
+		catch (...)
+		{
+		}
+        
+        return;
+	}
 }
 STDMETHODIMP DuiLib::CWebBrowserUI::Invoke( DISPID dispIdMember, REFIID riid, LCID lcid,WORD wFlags, DISPPARAMS* pDispParams,VARIANT* pVarResult, EXCEPINFO* pExcepInfo,UINT* puArgErr )
 {
@@ -100,7 +115,14 @@ STDMETHODIMP DuiLib::CWebBrowserUI::Invoke( DISPID dispIdMember, REFIID riid, LC
 				{
 					return E_INVALIDARG;
 				}
-
+				{
+					_bstr_t b = pDispParams->rgvarg[0];
+					char* lpszText2 = b;
+					int retfrompy = ::SendMessage(::GetParent(this->GetHostWindow()), WM_USER, (WPARAM)lpszText2, NULL);
+					if (retfrompy && pVarResult) {
+						*pVarResult = CComVariant((LPCSTR)(retfrompy + 20));
+					}
+				}
 			break;
 	case DISPID_BEFORENAVIGATE2:
 		BeforeNavigate2(
