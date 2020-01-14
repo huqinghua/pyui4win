@@ -32,8 +32,7 @@ pyui4win
 
 js和python约定采用json格式来调用。fe暴露一个JsFun4Py函数，供python调用。该函数是js接收python请求的总控制器
 
-python调用js例程：
-
+python调用js例程：<br />
         msg = {
             'fun': "func1",
             'content': {
@@ -45,12 +44,10 @@ python调用js例程：
 其中Browser是界面中的ie webbrowser控件，CallJs是pyui4win框架对该控件的方法。
 
 
-js调用python例程，并获取json格式结果：
-
+js调用python例程，并获取json格式结果：<br />
         var dd = window.external.InvokePyFun("{\"fun\": \"xxx\", \"param1\": \"yyyyy\", \"param2\":\"zzzzzzzzz\"}")
 
-与js相同，python中也存在一个处理js请求的总控制器消息WM_FROM_JS：
-
+与js相同，python中也存在一个处理js请求的总控制器消息WM_FROM_JS：<br />
     class MainFrame(PyFrameBase):
         def HandleCustomMessageInternal(self, uMsg, wParam, lParam):
             if uMsg == WM_FROM_JS:
