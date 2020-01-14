@@ -77,15 +77,13 @@ class MainFrame(PyFrameBase):
                 self.CloseWindow()
                 
             elif sendor == "btnOpenLog":
-                if os.path.isfile(PyWin32Util.GetExeDirectory() + '\\applog.ini'):
-                    #shell32 = ctypes.windll.LoadLibrary("shell32.dll");
-                    #shell32.ShellExecuteA(None,'open', 'notepad',PyWin32Util.GetExeDirectory() + '\\applog.ini','',1);
-                    PyWin32Util.ShellExcute(0, 'open', PyWin32Util.GetExeDirectory() + '\\applog.ini', '', '', 1)
+                if os.path.isfile(PyWin32Util.GetExeDirectory() + '\\applog\\applog.ini'):
+                    PyWin32Util.ShellExcute(0, 'open', PyWin32Util.GetExeDirectory() + '\\applog\\applog.ini', '', '', 1)
 
             elif sendor == "btnClearLog":
                 self.txtDiagnose.SetText('')
-                if os.path.isfile(PyWin32Util.GetExeDirectory() + '\\applog.ini'):
-                    os.remove(PyWin32Util.GetExeDirectory() + '\\applog.ini')
+                if os.path.isfile(PyWin32Util.GetExeDirectory() + '\\applog\\applog.ini'):
+                    os.remove(PyWin32Util.GetExeDirectory() + '\\applog\\applog.ini')
 
             elif sendor == "btnExcute":
                 t = threading.Thread(target=PyThreadPythonExecute,args=(self,))
