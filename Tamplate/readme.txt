@@ -1,1 +1,1 @@
-先解压lib.rar, 再执行Launcher.exe
+先解压lib.rar, dll.rar, 再执行Launcher.exe
