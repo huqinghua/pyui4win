@@ -6,13 +6,10 @@ pyui4win
 # 应用框架
 ![](doc/应用框架.png)
 
-1、pyui4win根据xml/html/js/css创建界面
-
-2、Pyui4win接收用户的操作事件，并选择该事件对应的python处理例程
-
-3、将该例程放在内嵌python引擎中执行
-
-4、Pyui4win将处理结果展示给用户
+1、pyui4win根据xml/html/js/css创建界面<br />
+2、Pyui4win接收用户的操作事件，并选择该事件对应的python处理例程<br />
+3、将该例程放在内嵌python引擎中执行<br />
+4、Pyui4win将处理结果展示给用户<br />
 
 # 桥接器原理
 ![](doc/事件处理流程.png)
