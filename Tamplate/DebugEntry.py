@@ -17,13 +17,12 @@ def AdjustSysPath():
     for x in removepath:
         sys.path.remove(x)
         
-    sys.path.append(os.path.join(PyWin32Util.GetExeDirectory(), 'ext'))
-    sys.path.append(os.path.join(PyWin32Util.GetExeDirectory(), 'robots'))
 
 def PyAppLaunch():
     AdjustSysPath()
     CommonUtils.SaveExePath()
-    Dui4Win.Run()
+    Dui4Win.Run()   
+     
 if __name__ == "__main__":
     PyAppLaunch()
 

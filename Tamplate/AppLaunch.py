@@ -3,7 +3,7 @@ __author__ = 'huqinghua'
 
 import os
 import Dui4Win
-from CommonUtil import CommonUtils
+from CommonUtil import CommonUtils, PyWin32Util
 
 def AdjustSysPath():
     """
@@ -18,6 +18,7 @@ def AdjustSysPath():
 
     for x in removepath:
         sys.path.remove(x)
+        
 def PyAppLaunch():
     AdjustSysPath()
     CommonUtils.SaveExePath()

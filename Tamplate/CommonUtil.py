@@ -2,7 +2,8 @@
 # __author__ = 'huqinghua'
 
 import string, os, commands, time
-
+import Dui4Win
+from PyUI import *
 
 MB_OK = 0x00000000L
 SW_SHOWNORMAL = 1

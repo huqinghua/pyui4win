@@ -153,7 +153,7 @@ static int Run4CmdWithoutUI(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LP
 	{
 		_module = new boost::python::handle<>(
 			PyImport_ImportModule("PyMain"));
-		bool ret = boost::python::call_method<bool>(_module->get(), "PyAppInit4Robot");
+		bool ret = boost::python::call_method<bool>(_module->get(), "PyAppInit4Debug");
 		//CPaintManagerUI::MessageLoop();
 	}
 	catch(boost::python::error_already_set const &)
