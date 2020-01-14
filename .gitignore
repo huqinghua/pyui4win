@@ -1,4 +1,4 @@
-*.py[cod]
+*.pyc
 
 # C extensions
 *.so
@@ -32,7 +32,6 @@ nosetests.xml
 # Mr Developer
 .mr.developer.cfg
 .project
-.pydevproject
 *.pdb
 *.idb
 *.user
