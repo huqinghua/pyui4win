@@ -93,6 +93,8 @@ class PyWin32Util():
 class CommonUtils():
 
     exeRoot = ''
+    pylogInstance = PyLog()
+    pywinUtilsInstance = PyWinUtils()
 
     @classmethod
     def SaveExePath(cls):

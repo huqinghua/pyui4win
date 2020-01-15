@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <title>网页</title>
+<Script language="javascript">
+        var ClosesWindow = true;
+        function func1()
+        {
+            var dd = window.external.InvokePyFun("{\"fun\": \"func1\", \"param1\": \"xxxxx\", \"param2\":\"zzz\"}");
+			alert(dd)
+        }
+        function func2()
+        {
+            var dd = window.external.InvokePyFun("{\"fun\": \"func2\", \"param1\": \"xxxxx\", \"param2\":\"zzz\"}");
+			alert(dd)
+        }
+        function func3()
+        {
+            var dd = window.external.InvokePyFun("{\"fun\": \"func3\", \"param1\": \"xxxxx\", \"param2\":\"zzz\"}");
+			alert(dd)
+        }
+        function JsFun4Py(parm)
+        {
+            alert(parm)
+        }
+        
+        </script>
+</head>
+<body>
+
+ <form action="#">
+
+  <input type="submit" value="js call python func1" onclick="func1()"/>
+  <input type="submit" value="js call python func2" onclick="func2()"/>
+  <input type="submit" value="python调用js" onclick="func3()"/>
+ </form>
+</body>
+</html>
