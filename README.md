@@ -66,7 +66,8 @@ js调用python例程，并获取json格式结果：
 除了最佳实践，也可以用界面设计器直接配置界面。界面设计器会自动生成界面处理框架代码
 
 # Demo
-Tamplate下是一个demo。该demo用xml配置的界面。界面配置文件在skin文件夹中
+Tamplate下是一个简单界面实践demo。该demo用xml配置界面。
+DemoWeb下是pyui4win最佳实践demo。
 
 # 注意事项
 请不要用ctype方式调用windows messagebox对话框或者其他标准对话框，需要时可以使用pyui4win里面已经封装好的标准对话框，或者自己在pyui4win中做扩展。用ctype调用其它的api都没有问题。至于原因，还没有时间研究，猜测是与duilib的实现方式和ctype的实现方式有关系。期待对这个问题有研究的同学可以告诉我 :)
