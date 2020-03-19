@@ -1,14 +1,13 @@
-# coding=gbk
-__author__ = 'hqh'
+# __author__ = 'hqh'
 
 import string, time
 import traceback
-from PyUI import PyWinUtils
-from PyUI import PyUIFactory
-from PyUI import PyUICast
-from PyUI import PyUIBase
-from PyUI import PyLog
-from PyUI import PyFrameCreator
+from Dui4Win import PyWinUtils
+from Dui4Win import PyUIFactory
+from Dui4Win import PyUICast
+from Dui4Win import PyUIBase
+from Dui4Win import PyLog
+from Dui4Win import PyFrameCreator
 import win32con
 
 
@@ -412,11 +411,9 @@ class PyFrameBase(PyUIBase):
         SecurePrint
         """
         try:
-            newline = str(msg)
-            if isinstance(newline, unicode):
-                newline = newline.encode("gb2312")
             if logText:
                 PyLog().LogText(newline)
+            
             # print(msg)
         except:
             pass

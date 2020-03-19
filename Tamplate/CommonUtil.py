@@ -1,39 +1,16 @@
-# coding=gbk
 # __author__ = 'huqinghua'
 
-import string, os, commands, time
-import Dui4Win
-from PyUI import *
+import string, os, time, sys
+import win32api
+from Dui4Win import *
 
-MB_OK = 0x00000000L
+MB_OK = 0x00000000
 SW_SHOWNORMAL = 1
 class PyWin32Util():
     """
-    调用CWin32Api 提供 win下一系列操作
+    璋冪敤CWin32Api 鎻愪緵 win涓嬩竴绯诲垪鎿嶄綔
     """
     pywinUtilsInstance = PyWinUtils()
-
-    @classmethod
-    def ReverseToExePath(cls):
-        """
-        description:
-        """
-        os.chdir(cls.pywinUtilsInstance.GetExeDirectory())
-
-    @classmethod
-    def GetPyUI4WinDirectory(cls):
-        """
-        description:
-        """
-        return cls.pywinUtilsInstance.GetPyUI4WinDirectory()
-
-    @classmethod
-    def GetExeDirectory(cls):
-        """
-        description:
-        """
-        # return PyWinUtils().GetExeDirectory()
-        return cls.pywinUtilsInstance.GetPyUI4WinDirectory()
 
     @classmethod
     def SetCurrentDirectory(cls, cdir):
@@ -50,46 +27,13 @@ class PyWin32Util():
         cls.pywinUtilsInstance.SetCurrentDirectoryToExePath()
 
     @classmethod
-    def SetWaitCursor(cls):
-        """
-        description:
-        """
-        cls.pywinUtilsInstance.SetWaitCursor()
+    def GetExeDirectory(cls):
+        return os.path.dirname(sys.executable)
 
     @classmethod
-    def SetArrowCursor(cls):
-        """
-        description:
-        """
-        cls.pywinUtilsInstance.SetArrowCursor()
+    def ShellExcute(hwnd, lpOperation, lpFile, lpParameters, lpDirectory, nShowCmd):
+        win32api.ShellExecute(hwnd, lpOperation, lpFile, lpParameters, lpDirectory, nShowCmd)
 
-    @classmethod
-    def ShellExcute(cls, hwnd, lpOperation, lpFile, lpParameters='', lpDirectory='', nShowCmd=SW_SHOWNORMAL):
-        """
-        description:
-        """
-        return cls.pywinUtilsInstance.ShellExcute(hwnd, lpOperation, lpFile, lpParameters, lpDirectory, nShowCmd)
-
-    @classmethod
-    def SelectFile(cls, hwnd, filter='All files(*.*)\0*.*\0'):
-        """
-        description:
-        """
-        return cls.pywinUtilsInstance.SelectFile(hwnd, filter)
-
-    @classmethod
-    def MessageBox(cls, hwnd, text, caption, btntype=MB_OK):
-        """
-        description:
-        """
-        return cls.pywinUtilsInstance.MessageBox(hwnd, text, caption, btntype)
-
-    @classmethod
-    def SelectFolder(cls, hwnd, title, saveTag=''):
-        """
-        description:
-        """
-        return cls.pywinUtilsInstance.SelectFolder(hwnd, title, saveTag)
 class CommonUtils():
 
     exeRoot = ''
@@ -142,4 +86,8 @@ class CommonUtils():
         except:
             pass
 
+def G2U(gbkBytes : bytes) -> str:
+    return gbkBytes.decode('gbk')
 
+def U2G(unicodestr : str) -> bytes:
+    return unicodestr.encode('gbk')

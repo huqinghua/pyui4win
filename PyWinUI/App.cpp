@@ -58,21 +58,20 @@ extern "C" void SwitchToOtherPythonTread()
 	}
 }
 
-
-static int RegisterDui4WinModule()
-{
-	HRESULT Hr = ::CoInitialize(NULL);
-	if( FAILED(Hr) )
-		return 0;
-
-	// 初始化python
-	Py_Initialize();
-
-	// 注册Py模块
-	PyExtentInit();
-
-	return 0;
-}
+//static int RegisterDui4WinModule()
+//{
+//	HRESULT Hr = ::CoInitialize(NULL);
+//	if( FAILED(Hr) )
+//		return 0;
+//
+//	// 初始化python
+//	Py_Initialize();
+//
+//	// 注册Py模块
+//	PyExtentInit();
+//
+//	return 0;
+//}
 
 
 
@@ -181,19 +180,19 @@ static int Run4CmdWithoutUI(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LP
 	return 0;
 }
 
-static PyObject* RegisterDui4Win(PyObject* self, PyObject* args) 
-{
-	RegisterDui4WinModule();
-	return Py_None;
-}
+//static PyObject* RegisterDui4Win(PyObject* self, PyObject* args) 
+//{
+//	RegisterDui4WinModule();
+//	return Py_None;
+//}
 
-static PyObject* Run4Cmd(PyObject* self, PyObject* args) 
+PyObject* Run4Cmd() 
 {
 	Run4CmdWithoutUI(g_hInstance, NULL, NULL, 0);
 	return Py_None;
 }
 
-static PyObject* Run(PyObject* self, PyObject* args) 
+PyObject* Run() 
 {
 	RunDui(g_hInstance, NULL, NULL, 0);
 	return Py_None;
@@ -221,18 +220,27 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 	return TRUE;
 }
 
-
-static PyMethodDef DuiMethods[]= 
-{
-	{"Run",Run,METH_VARARGS, "run dui"},
-	{"Run4Cmd",Run4Cmd,METH_VARARGS, "Run4Cmd"},
-	{"RegisterDui4Win",RegisterDui4Win,METH_VARARGS, "Register Dui4Win Module"},
-	
-	{NULL,NULL,0,NULL}   
-};
-
-PyMODINIT_FUNC
-init_PyDui4Win(void) {
-	(void) Py_InitModule("_PyDui4Win",DuiMethods);
-}
+//
+//static PyMethodDef DuiMethods[]= 
+//{
+//	{"Run",Run,METH_VARARGS, "run dui"},
+//	{"Run4Cmd",Run4Cmd,METH_VARARGS, "Run4Cmd"},
+//	{"RegisterDui4Win",RegisterDui4Win,METH_VARARGS, "Register Dui4Win Module"},
+//	
+//	{NULL,NULL,0,NULL}   
+//};
+//
+//static struct PyModuleDef dui4winModuleDef =
+//{
+//	PyModuleDef_HEAD_INIT,
+//	"PyDui4Win", /* name of module */
+//	"",          /* module documentation, may be NULL */
+//	-1,          /* size of per-interpreter state of the module, or -1 if the module keeps state in global variables. */
+//	DuiMethods
+//};
+//
+//PyMODINIT_FUNC
+//PyInit__PyDui4Win(void) {
+//	return PyModule_Create(&dui4winModuleDef);
+//}
 

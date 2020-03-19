@@ -1,32 +1,53 @@
 /* Definitions for bytecode */
 
+#ifndef Py_LIMITED_API
 #ifndef Py_CODE_H
 #define Py_CODE_H
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+typedef uint16_t _Py_CODEUNIT;
+
+#ifdef WORDS_BIGENDIAN
+#  define _Py_OPCODE(word) ((word) >> 8)
+#  define _Py_OPARG(word) ((word) & 255)
+#else
+#  define _Py_OPCODE(word) ((word) & 255)
+#  define _Py_OPARG(word) ((word) >> 8)
+#endif
+
 /* Bytecode object */
 typedef struct {
     PyObject_HEAD
     int co_argcount;		/* #arguments, except *args */
+    int co_kwonlyargcount;	/* #keyword only arguments */
     int co_nlocals;		/* #local variables */
     int co_stacksize;		/* #entries needed for evaluation stack */
     int co_flags;		/* CO_..., see below */
+    int co_firstlineno;   /* first source line number */
     PyObject *co_code;		/* instruction opcodes */
     PyObject *co_consts;	/* list (constants used) */
     PyObject *co_names;		/* list of strings (names used) */
     PyObject *co_varnames;	/* tuple of strings (local variable names) */
     PyObject *co_freevars;	/* tuple of strings (free variable names) */
     PyObject *co_cellvars;      /* tuple of strings (cell variable names) */
-    /* The rest doesn't count for hash/cmp */
-    PyObject *co_filename;	/* string (where it was loaded from) */
-    PyObject *co_name;		/* string (name, for reference) */
-    int co_firstlineno;		/* first source line number */
+    /* The rest aren't used in either hash or comparisons, except for co_name,
+       used in both. This is done to preserve the name and line number
+       for tracebacks and debuggers; otherwise, constant de-duplication
+       would collapse identical functions/lambdas defined on different lines.
+    */
+    unsigned char *co_cell2arg; /* Maps cell vars which are arguments. */
+    PyObject *co_filename;	/* unicode (where it was loaded from) */
+    PyObject *co_name;		/* unicode (name, for reference) */
     PyObject *co_lnotab;	/* string (encoding addr<->lineno mapping) See
 				   Objects/lnotab_notes.txt for details. */
     void *co_zombieframe;     /* for optimization only (see frameobject.c) */
     PyObject *co_weakreflist;   /* to support weakrefs to code objects */
+    /* Scratch space for extra data relating to the code object.
+       Type is a void* to keep the format private in codeobject.c to force
+       people to go through the proper APIs. */
+    void *co_extra;
 } PyCodeObject;
 
 /* Masks for co_flags above */
@@ -43,8 +64,14 @@ typedef struct {
 */
 #define CO_NOFREE       0x0040
 
+/* The CO_COROUTINE flag is set for coroutine functions (defined with
+   ``async def`` keywords) */
+#define CO_COROUTINE            0x0080
+#define CO_ITERABLE_COROUTINE   0x0100
+#define CO_ASYNC_GENERATOR      0x0200
+
+/* These are no longer used. */
 #if 0
-/* This is no longer used.  Stopped defining in 2.5, do not re-use. */
 #define CO_GENERATOR_ALLOWED    0x1000
 #endif
 #define CO_FUTURE_DIVISION    	0x2000
@@ -53,12 +80,18 @@ typedef struct {
 #define CO_FUTURE_PRINT_FUNCTION  0x10000
 #define CO_FUTURE_UNICODE_LITERALS 0x20000
 
+#define CO_FUTURE_BARRY_AS_BDFL  0x40000
+#define CO_FUTURE_GENERATOR_STOP  0x80000
+
+/* This value is found in the co_cell2arg array when the associated cell
+   variable does not correspond to an argument. The maximum number of
+   arguments is 255 (indexed up to 254), so 255 work as a special flag.*/
+#define CO_CELL_NOT_AN_ARG 255
+
 /* This should be defined if a future statement modifies the syntax.
    For example, when a keyword is added.
 */
-#if 1
 #define PY_PARSER_REQUIRES_FUTURE_KEYWORD
-#endif
 
 #define CO_MAXBLOCKS 20 /* Max static block nesting within a function */
 
@@ -69,8 +102,9 @@ PyAPI_DATA(PyTypeObject) PyCode_Type;
 
 /* Public interface */
 PyAPI_FUNC(PyCodeObject *) PyCode_New(
-	int, int, int, int, PyObject *, PyObject *, PyObject *, PyObject *,
-	PyObject *, PyObject *, PyObject *, PyObject *, int, PyObject *);
+	int, int, int, int, int, PyObject *, PyObject *,
+	PyObject *, PyObject *, PyObject *, PyObject *,
+	PyObject *, PyObject *, int, PyObject *);
         /* same as struct above */
 
 /* Creates a new empty code object with the specified source location. */
@@ -83,15 +117,12 @@ PyCode_NewEmpty(const char *filename, const char *funcname, int firstlineno);
 PyAPI_FUNC(int) PyCode_Addr2Line(PyCodeObject *, int);
 
 /* for internal use only */
-#define _PyCode_GETCODEPTR(co, pp) \
-	((*Py_TYPE((co)->co_code)->tp_as_buffer->bf_getreadbuffer) \
-	 ((co)->co_code, 0, (void **)(pp)))
-
 typedef struct _addr_pair {
         int ap_lower;
         int ap_upper;
 } PyAddrPair;
 
+#ifndef Py_LIMITED_API
 /* Update *bounds to describe the first and one-past-the-last instructions in the
    same line as lasti.  Return the number of that line.
 */
@@ -106,11 +137,21 @@ PyAPI_FUNC(int) _PyCode_CheckLineNumber(PyCodeObject* co,
  * depending on the type and the value. The type is the first item to not
  * compare bytes and str which can raise a BytesWarning exception. */
 PyAPI_FUNC(PyObject*) _PyCode_ConstantKey(PyObject *obj);
+#endif
 
 PyAPI_FUNC(PyObject*) PyCode_Optimize(PyObject *code, PyObject* consts,
-                                      PyObject *names, PyObject *lineno_obj);
+                                      PyObject *names, PyObject *lnotab);
+
+
+#ifndef Py_LIMITED_API
+PyAPI_FUNC(int) _PyCode_GetExtra(PyObject *code, Py_ssize_t index,
+                                 void **extra);
+PyAPI_FUNC(int) _PyCode_SetExtra(PyObject *code, Py_ssize_t index,
+                                 void *extra);
+#endif
 
 #ifdef __cplusplus
 }
 #endif
 #endif /* !Py_CODE_H */
+#endif /* Py_LIMITED_API */

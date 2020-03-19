@@ -20,6 +20,9 @@ using namespace std;
 using namespace DuiLib;
 using namespace boost::python;
 
+PyObject* Run();
+PyObject* Run4Cmd();
+
 typedef boost::shared_ptr < PyFrameCreator > PyFrame_ptr;  
 typedef boost::shared_ptr < CControlUI > PyControlUI_ptr;  
 typedef boost::shared_ptr < CLabelUI > PyLabelUI_ptr;  
@@ -36,8 +39,18 @@ typedef boost::shared_ptr < CListContainerElementUI > PyListContainerElementUI_p
 typedef boost::shared_ptr < PyUIFactory > PyUIFactory_ptr;  
 typedef boost::shared_ptr < CWebBrowserEventHandler > PyWebBrowserEventHandler_ptr; 
 
-BOOST_PYTHON_MODULE(PyUI)
+
+void* bytes_to_pchar(PyObject* obj)
 {
+	return PyBytes_Check(obj) ? PyBytes_AsString(obj) : 0;
+}
+
+BOOST_PYTHON_MODULE(_PyDui4Win)
+{
+	duilib_registration();
+
+	def("Run", Run);
+	def("Run4Cmd", Run4Cmd);
 
 	class_<SIZE>("SIZE")
 		.def_readwrite("cx", &SIZE::cx)
@@ -465,24 +478,10 @@ BOOST_PYTHON_MODULE(PyUI)
 		;
 
 	class_<CWin32Api>("PyWinUtils")
-		.def("GetExeDirectory", &CWin32Api::GetExeDirectory)
-		.def("GetPyUI4WinDirectory", &CWin32Api::GetPyUI4WinDirectory)
-		.def("SetCurrentDirectory", &CWin32Api::SetCurrentDirectory)
 		.def("SetCurrentDirectoryToExePath", &CWin32Api::SetCurrentDirectoryToExePath)
-		.def("SetWaitCursor", &CWin32Api::SetWaitCursor)
-		.def("SetArrowCursor", &CWin32Api::SetArrowCursor)
-		.def("ShellExcute", &CWin32Api::ShellExcute)
-		.def("SelectFile", &CWin32Api::SelectFile)
-		.def("MessageBox", &CWin32Api::MessageBox)
-		.def("SelectFolder", &CWin32Api::SelectFolder)
-		.def("CreateDirectory", &CWin32Api::CreateDirectory)
 		.def("Sleep", &CWin32Api::Sleep)
 		.def("SetTimer", &CWin32Api::SetTimer)
 		.def("KillTimer", &CWin32Api::KillTimer)
-		.def("SetConnectionOptions", &CWin32Api::SetConnectionOptions)
-		.def("DisableConnectionProxy", &CWin32Api::DisableConnectionProxy)
-		.def("Conver2string", &CWin32Api::Conver2string)
-		.def("OutputDebugMsg", &CWin32Api::OutputDebugMsg)
 		.def("SendMessageA", &CWin32Api::SendMessageA)
 		.def("PostMessageA", &CWin32Api::PostMessageA)
 		.def("MoveWindowRelative", &CWin32Api::MoveWindowRelative)
@@ -512,12 +511,13 @@ BOOST_PYTHON_MODULE(PyUI)
 	register_ptr_to_python <PyListContainerElementUI_ptr>();  
 	register_ptr_to_python <PyUIFactory_ptr>();  
 	register_ptr_to_python <PyWebBrowserEventHandler_ptr>();  
+	converter::registry::insert(bytes_to_pchar, type_id<char>(), &converter::wrap_pytype<&PyBytes_Type>::get_pytype);
 }
 
 void PyExtentInit()
 {
-	duilib_registration();
-	PyImport_AppendInittab("PyUI", initPyUI);
+	//duilib_registration();
+	//PyImport_AppendInittab("PyUI", &PyInit_PyUI);
 }
 
 std::string PyScript::RunPy(std::string pyModule, std::string pyFunc)

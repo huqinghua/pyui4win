@@ -1,11 +1,13 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DuiLib", "DuiLib\DuiLib.vcproj", "{E106ACD7-4E53-4AEE-942B-D0DD426DB34E}"
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DuiLib", "DuiLib\DuiLib.vcxproj", "{E106ACD7-4E53-4AEE-942B-D0DD426DB34E}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_PyDui4Win", "PyWinUI\PyWinUI.vcproj", "{41B017E7-7805-40D5-9D96-AABF572F57D1}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_PyDui4Win", "PyWinUI\PyWinUI.vcxproj", "{41B017E7-7805-40D5-9D96-AABF572F57D1}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Launcher", "Launcher\Launcher.vcproj", "{48A20CD3-224A-49CC-8844-CDEC40AE03E6}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Launcher", "Launcher\Launcher.vcxproj", "{48A20CD3-224A-49CC-8844-CDEC40AE03E6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

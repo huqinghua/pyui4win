@@ -1,8 +1,7 @@
-__author__ = 'huqinghua'
-# coding=gbk
+# __author__ = 'huqinghua'
 
 import string, os, commands, time
-from PyUI import *
+# from PyUI import *
 from PyFrameBase import *
 
 class MsgBox(PyFrameBase):

@@ -1,8 +1,8 @@
-__author__ = 'huqinghua'
-# coding=gbk
+# __author__ = 'huqinghua'
 
 import os
 import Dui4Win
+from Dui4Win import *
 from CommonUtil import *
 
 def AdjustSysPath():

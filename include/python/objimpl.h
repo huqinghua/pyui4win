@@ -94,52 +94,32 @@ PyObject_{New, NewVar, Del}.
    the object gets initialized via PyObject_{Init, InitVar} after obtaining
    the raw memory.
 */
-PyAPI_FUNC(void *) PyObject_Malloc(size_t);
-PyAPI_FUNC(void *) PyObject_Realloc(void *, size_t);
-PyAPI_FUNC(void) PyObject_Free(void *);
+PyAPI_FUNC(void *) PyObject_Malloc(size_t size);
+#if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03050000
+PyAPI_FUNC(void *) PyObject_Calloc(size_t nelem, size_t elsize);
+#endif
+PyAPI_FUNC(void *) PyObject_Realloc(void *ptr, size_t new_size);
+PyAPI_FUNC(void) PyObject_Free(void *ptr);
 
+#ifndef Py_LIMITED_API
+/* This function returns the number of allocated memory blocks, regardless of size */
+PyAPI_FUNC(Py_ssize_t) _Py_GetAllocatedBlocks(void);
+#endif /* !Py_LIMITED_API */
 
 /* Macros */
 #ifdef WITH_PYMALLOC
-#ifdef PYMALLOC_DEBUG   /* WITH_PYMALLOC && PYMALLOC_DEBUG */
-PyAPI_FUNC(void *) _PyObject_DebugMalloc(size_t nbytes);
-PyAPI_FUNC(void *) _PyObject_DebugRealloc(void *p, size_t nbytes);
-PyAPI_FUNC(void) _PyObject_DebugFree(void *p);
-PyAPI_FUNC(void) _PyObject_DebugDumpAddress(const void *p);
-PyAPI_FUNC(void) _PyObject_DebugCheckAddress(const void *p);
-PyAPI_FUNC(void) _PyObject_DebugMallocStats(void);
-PyAPI_FUNC(void *) _PyObject_DebugMallocApi(char api, size_t nbytes);
-PyAPI_FUNC(void *) _PyObject_DebugReallocApi(char api, void *p, size_t nbytes);
-PyAPI_FUNC(void) _PyObject_DebugFreeApi(char api, void *p);
-PyAPI_FUNC(void) _PyObject_DebugCheckAddressApi(char api, const void *p);
-PyAPI_FUNC(void *) _PyMem_DebugMalloc(size_t nbytes);
-PyAPI_FUNC(void *) _PyMem_DebugRealloc(void *p, size_t nbytes);
-PyAPI_FUNC(void) _PyMem_DebugFree(void *p);
-#define PyObject_MALLOC         _PyObject_DebugMalloc
-#define PyObject_Malloc         _PyObject_DebugMalloc
-#define PyObject_REALLOC        _PyObject_DebugRealloc
-#define PyObject_Realloc        _PyObject_DebugRealloc
-#define PyObject_FREE           _PyObject_DebugFree
-#define PyObject_Free           _PyObject_DebugFree
+#ifndef Py_LIMITED_API
+PyAPI_FUNC(void) _PyObject_DebugMallocStats(FILE *out);
+#endif /* #ifndef Py_LIMITED_API */
+#endif
 
-#else   /* WITH_PYMALLOC && ! PYMALLOC_DEBUG */
+/* Macros */
 #define PyObject_MALLOC         PyObject_Malloc
 #define PyObject_REALLOC        PyObject_Realloc
 #define PyObject_FREE           PyObject_Free
-#endif
-
-#else   /* ! WITH_PYMALLOC */
-#define PyObject_MALLOC         PyMem_MALLOC
-#define PyObject_REALLOC        PyMem_REALLOC
-#define PyObject_FREE           PyMem_FREE
-
-#endif  /* WITH_PYMALLOC */
-
 #define PyObject_Del            PyObject_Free
-#define PyObject_DEL            PyObject_FREE
+#define PyObject_DEL            PyObject_Free
 
-/* for source compatibility with 2.2 */
-#define _PyObject_Del           PyObject_Free
 
 /*
  * Generic object allocator interface
@@ -172,7 +152,7 @@ PyAPI_FUNC(PyVarObject *) _PyObject_NewVar(PyTypeObject *, Py_ssize_t);
    value is rounded up to the closest multiple of sizeof(void *), in order to
    ensure that pointer fields at the end of the object are correctly aligned
    for the platform (this is of special importance for subclasses of, e.g.,
-   str or long, so that pointers can be stored after the embedded data).
+   str or int, so that pointers can be stored after the embedded data).
 
    Note that there's no memory wastage in doing this, as malloc has to
    return (at worst) pointer-aligned memory anyway.
@@ -182,12 +162,9 @@ PyAPI_FUNC(PyVarObject *) _PyObject_NewVar(PyTypeObject *, Py_ssize_t);
 #endif
 
 #define _PyObject_VAR_SIZE(typeobj, nitems)     \
-    (size_t)                                    \
-    ( ( (typeobj)->tp_basicsize +               \
-        (nitems)*(typeobj)->tp_itemsize +       \
-        (SIZEOF_VOID_P - 1)                     \
-      ) & ~(SIZEOF_VOID_P - 1)                  \
-    )
+    _Py_SIZE_ROUND_UP((typeobj)->tp_basicsize + \
+        (nitems)*(typeobj)->tp_itemsize,        \
+        SIZEOF_VOID_P)
 
 #define PyObject_NEW(type, typeobj) \
 ( (type *) PyObject_Init( \
@@ -226,13 +203,38 @@ PyAPI_FUNC(PyVarObject *) _PyObject_NewVar(PyTypeObject *, Py_ssize_t);
    constructor you would start directly with PyObject_Init/InitVar
 */
 
+#ifndef Py_LIMITED_API
+typedef struct {
+    /* user context passed as the first argument to the 2 functions */
+    void *ctx;
+
+    /* allocate an arena of size bytes */
+    void* (*alloc) (void *ctx, size_t size);
+
+    /* free an arena */
+    void (*free) (void *ctx, void *ptr, size_t size);
+} PyObjectArenaAllocator;
+
+/* Get the arena allocator. */
+PyAPI_FUNC(void) PyObject_GetArenaAllocator(PyObjectArenaAllocator *allocator);
+
+/* Set the arena allocator. */
+PyAPI_FUNC(void) PyObject_SetArenaAllocator(PyObjectArenaAllocator *allocator);
+#endif
+
+
 /*
  * Garbage Collection Support
  * ==========================
  */
 
-/* C equivalent of gc.collect(). */
+/* C equivalent of gc.collect() which ignores the state of gc.enabled. */
 PyAPI_FUNC(Py_ssize_t) PyGC_Collect(void);
+
+#ifndef Py_LIMITED_API
+PyAPI_FUNC(Py_ssize_t) _PyGC_CollectNoFail(void);
+PyAPI_FUNC(Py_ssize_t) _PyGC_CollectIfEnabled(void);
+#endif
 
 /* Test if a type has a GC head */
 #define PyType_IS_GC(t) PyType_HasFeature((t), Py_TPFLAGS_HAVE_GC)
@@ -245,37 +247,44 @@ PyAPI_FUNC(PyVarObject *) _PyObject_GC_Resize(PyVarObject *, Py_ssize_t);
 #define PyObject_GC_Resize(type, op, n) \
                 ( (type *) _PyObject_GC_Resize((PyVarObject *)(op), (n)) )
 
-/* for source compatibility with 2.2 */
-#define _PyObject_GC_Del PyObject_GC_Del
-
-/*
- * Former over-aligned definition of PyGC_Head, used to compute the size of the
- * padding for the new version below.
- */
-union _gc_head;
-union _gc_head_old {
-    struct {
-        union _gc_head_old *gc_next;
-        union _gc_head_old *gc_prev;
-        Py_ssize_t gc_refs;
-    } gc;
-    long double dummy;
-};
-
 /* GC information is stored BEFORE the object structure. */
+#ifndef Py_LIMITED_API
 typedef union _gc_head {
     struct {
         union _gc_head *gc_next;
         union _gc_head *gc_prev;
         Py_ssize_t gc_refs;
     } gc;
-    double dummy; /* Force at least 8-byte alignment. */
-    char dummy_padding[sizeof(union _gc_head_old)];
+    double dummy;  /* force worst-case alignment */
 } PyGC_Head;
 
 extern PyGC_Head *_PyGC_generation0;
 
 #define _Py_AS_GC(o) ((PyGC_Head *)(o)-1)
+
+/* Bit 0 is set when tp_finalize is called */
+#define _PyGC_REFS_MASK_FINALIZED  (1 << 0)
+/* The (N-1) most significant bits contain the gc state / refcount */
+#define _PyGC_REFS_SHIFT           (1)
+#define _PyGC_REFS_MASK            (((size_t) -1) << _PyGC_REFS_SHIFT)
+
+#define _PyGCHead_REFS(g) ((g)->gc.gc_refs >> _PyGC_REFS_SHIFT)
+#define _PyGCHead_SET_REFS(g, v) do { \
+    (g)->gc.gc_refs = ((g)->gc.gc_refs & ~_PyGC_REFS_MASK) \
+        | (((size_t)(v)) << _PyGC_REFS_SHIFT);             \
+    } while (0)
+#define _PyGCHead_DECREF(g) ((g)->gc.gc_refs -= 1 << _PyGC_REFS_SHIFT)
+
+#define _PyGCHead_FINALIZED(g) (((g)->gc.gc_refs & _PyGC_REFS_MASK_FINALIZED) != 0)
+#define _PyGCHead_SET_FINALIZED(g, v) do {  \
+    (g)->gc.gc_refs = ((g)->gc.gc_refs & ~_PyGC_REFS_MASK_FINALIZED) \
+        | (v != 0); \
+    } while (0)
+
+#define _PyGC_FINALIZED(o) _PyGCHead_FINALIZED(_Py_AS_GC(o))
+#define _PyGC_SET_FINALIZED(o, v) _PyGCHead_SET_FINALIZED(_Py_AS_GC(o), v)
+
+#define _PyGC_REFS(o) _PyGCHead_REFS(_Py_AS_GC(o))
 
 #define _PyGC_REFS_UNTRACKED                    (-2)
 #define _PyGC_REFS_REACHABLE                    (-3)
@@ -285,9 +294,9 @@ extern PyGC_Head *_PyGC_generation0;
  * collector it must be safe to call the ob_traverse method. */
 #define _PyObject_GC_TRACK(o) do { \
     PyGC_Head *g = _Py_AS_GC(o); \
-    if (g->gc.gc_refs != _PyGC_REFS_UNTRACKED) \
+    if (_PyGCHead_REFS(g) != _PyGC_REFS_UNTRACKED) \
         Py_FatalError("GC object already tracked"); \
-    g->gc.gc_refs = _PyGC_REFS_REACHABLE; \
+    _PyGCHead_SET_REFS(g, _PyGC_REFS_REACHABLE); \
     g->gc.gc_next = _PyGC_generation0; \
     g->gc.gc_prev = _PyGC_generation0->gc.gc_prev; \
     g->gc.gc_prev->gc.gc_next = g; \
@@ -300,8 +309,8 @@ extern PyGC_Head *_PyGC_generation0;
  */
 #define _PyObject_GC_UNTRACK(o) do { \
     PyGC_Head *g = _Py_AS_GC(o); \
-    assert(g->gc.gc_refs != _PyGC_REFS_UNTRACKED); \
-    g->gc.gc_refs = _PyGC_REFS_UNTRACKED; \
+    assert(_PyGCHead_REFS(g) != _PyGC_REFS_UNTRACKED); \
+    _PyGCHead_SET_REFS(g, _PyGC_REFS_UNTRACKED); \
     g->gc.gc_prev->gc.gc_next = g->gc.gc_next; \
     g->gc.gc_next->gc.gc_prev = g->gc.gc_prev; \
     g->gc.gc_next = NULL; \
@@ -309,16 +318,19 @@ extern PyGC_Head *_PyGC_generation0;
 
 /* True if the object is currently tracked by the GC. */
 #define _PyObject_GC_IS_TRACKED(o) \
-    ((_Py_AS_GC(o))->gc.gc_refs != _PyGC_REFS_UNTRACKED)
+    (_PyGC_REFS(o) != _PyGC_REFS_UNTRACKED)
 
 /* True if the object may be tracked by the GC in the future, or already is.
    This can be useful to implement some optimizations. */
 #define _PyObject_GC_MAY_BE_TRACKED(obj) \
     (PyObject_IS_GC(obj) && \
         (!PyTuple_CheckExact(obj) || _PyObject_GC_IS_TRACKED(obj)))
+#endif /* Py_LIMITED_API */
 
-
-PyAPI_FUNC(PyObject *) _PyObject_GC_Malloc(size_t);
+#ifndef Py_LIMITED_API
+PyAPI_FUNC(PyObject *) _PyObject_GC_Malloc(size_t size);
+PyAPI_FUNC(PyObject *) _PyObject_GC_Calloc(size_t size);
+#endif /* !Py_LIMITED_API */
 PyAPI_FUNC(PyObject *) _PyObject_GC_New(PyTypeObject *);
 PyAPI_FUNC(PyVarObject *) _PyObject_GC_NewVar(PyTypeObject *, Py_ssize_t);
 PyAPI_FUNC(void) PyObject_GC_Track(void *);
@@ -345,20 +357,9 @@ PyAPI_FUNC(void) PyObject_GC_Del(void *);
         }                                                               \
     } while (0)
 
-/* This is here for the sake of backwards compatibility.  Extensions that
- * use the old GC API will still compile but the objects will not be
- * tracked by the GC. */
-#define PyGC_HEAD_SIZE 0
-#define PyObject_GC_Init(op)
-#define PyObject_GC_Fini(op)
-#define PyObject_AS_GC(op) (op)
-#define PyObject_FROM_GC(op) (op)
-
 
 /* Test if a type supports weak references */
-#define PyType_SUPPORTS_WEAKREFS(t) \
-    (PyType_HasFeature((t), Py_TPFLAGS_HAVE_WEAKREFS) \
-     && ((t)->tp_weaklistoffset > 0))
+#define PyType_SUPPORTS_WEAKREFS(t) ((t)->tp_weaklistoffset > 0)
 
 #define PyObject_GET_WEAKREFS_LISTPTR(o) \
     ((PyObject **) (((char *) (o)) + Py_TYPE(o)->tp_weaklistoffset))

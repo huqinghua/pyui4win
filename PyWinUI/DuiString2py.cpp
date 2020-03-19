@@ -28,20 +28,20 @@ void python_duistring_registration() {
 }
 
 PyObject *duistring_to_pystr::convert( const CDuiString &s ) {
-	return PyString_FromString( s.GetData());
+	return PyBytes_FromString( s.GetData());
 }
 PyTypeObject const *duistring_to_pystr::get_pytype() {
-	return &PyString_Type;
+	return &PyBytes_Type;
 }
 
 void *duistring_from_pystr::convertible( PyObject *object ) {
-	if (!PyString_Check(object))  
+	if (!PyBytes_Check(object))
 		return NULL;  
 	return object;  
 }
 
 void duistring_from_pystr::construct( PyObject *object, boost::python::converter::rvalue_from_python_stage1_data *data ) {
-	const char* value = PyString_AsString(object);  
+	const char* value = PyBytes_AsString(object);  
 	if (!value)  
 		boost::python::throw_error_already_set();  
 	void *storage = reinterpret_cast<

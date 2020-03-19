@@ -19,6 +19,7 @@ returned item's reference count.
 extern "C" {
 #endif
 
+#ifndef Py_LIMITED_API
 typedef struct {
     PyObject_VAR_HEAD
     /* Vector of pointers to list elements.  list[0] is ob_item[0], etc. */
@@ -37,8 +38,12 @@ typedef struct {
      */
     Py_ssize_t allocated;
 } PyListObject;
+#endif
 
 PyAPI_DATA(PyTypeObject) PyList_Type;
+PyAPI_DATA(PyTypeObject) PyListIter_Type;
+PyAPI_DATA(PyTypeObject) PyListRevIter_Type;
+PyAPI_DATA(PyTypeObject) PySortWrapper_Type;
 
 #define PyList_Check(op) \
     PyType_FastSubclass(Py_TYPE(op), Py_TPFLAGS_LIST_SUBCLASS)
@@ -55,12 +60,20 @@ PyAPI_FUNC(int) PyList_SetSlice(PyObject *, Py_ssize_t, Py_ssize_t, PyObject *);
 PyAPI_FUNC(int) PyList_Sort(PyObject *);
 PyAPI_FUNC(int) PyList_Reverse(PyObject *);
 PyAPI_FUNC(PyObject *) PyList_AsTuple(PyObject *);
+#ifndef Py_LIMITED_API
 PyAPI_FUNC(PyObject *) _PyList_Extend(PyListObject *, PyObject *);
 
+PyAPI_FUNC(int) PyList_ClearFreeList(void);
+PyAPI_FUNC(void) _PyList_DebugMallocStats(FILE *out);
+#endif
+
 /* Macro, trading safety for speed */
+#ifndef Py_LIMITED_API
 #define PyList_GET_ITEM(op, i) (((PyListObject *)(op))->ob_item[i])
 #define PyList_SET_ITEM(op, i, v) (((PyListObject *)(op))->ob_item[i] = (v))
 #define PyList_GET_SIZE(op)    Py_SIZE(op)
+#define _PyList_ITEMS(op)      (((PyListObject *)(op))->ob_item)
+#endif
 
 #ifdef __cplusplus
 }

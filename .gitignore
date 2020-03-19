@@ -17,6 +17,7 @@ develop-eggs
 .installed.cfg
 lib
 lib64
+ipch
 
 # Installer logs
 pip-log.txt
@@ -28,6 +29,9 @@ nosetests.xml
 
 # Translations
 *.mo
+
+*.ini
+*.dmp
 
 # Mr Developer
 .mr.developer.cfg
