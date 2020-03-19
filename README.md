@@ -74,8 +74,8 @@ js调用python例程，并获取json格式结果：
 除了最佳实践，也可以用界面设计器直接配置界面。界面设计器会自动生成界面处理框架代码
 
 # Demo
-Tamplate下是一个简单界面实践demo。该demo用xml配置界面。
-DemoWeb下是pyui4win最佳实践（webbrowser版本）demo。
+Tamplate下是一个简单界面实践demo。该demo用xml配置界面。<br />
+DemoWeb下是pyui4win最佳实践（webbrowser版本）demo。<br />
 pyui4win最佳实践（electron版本）demo敬请期待
 
 # vs electron
