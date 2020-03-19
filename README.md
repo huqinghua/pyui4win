@@ -20,8 +20,8 @@ pyui4win
 
 在项目实践中，只需要实现python业务逻辑例程即可
 
-# 最佳实践
-在实践中，发现用html/css/js来实现界面层展现更快更酷炫，而且这样界面层和业务层逻辑更清晰。所以推荐html/css/js写界面逻辑，python实现业务逻辑。
+# 最佳实践（webbrowser版本）
+在实践中，发现用html/css/js来实现界面层展现开发效率更高，而且界面效果更酷炫，而且这样界面层和业务层逻辑更清晰。所以推荐html/css/js写界面逻辑，python实现业务逻辑。
 ![](doc/最佳实践.png)
 
 1、本地服务为fe提供有状态会话，并可以访问本机系统资源<br />
@@ -61,20 +61,27 @@ js调用python例程，并获取json格式结果：
             params = PyWinUtils().Conver2string(wParam)
             paramsjson = json.loads(params.decode('gbk'))
             if paramsjson['fun'] == "xxxx":
-            
+
+这种实践中，由于嵌入了ie的webbrowser控件，从而引入了不同ie版本的兼容性问题。为解决这个问题，可以采用以下的electron版本最佳实践
+
+# 最佳实践(electron版本)
+将上文最佳实践中的展现层完全独立出来，用electron来实现展现层，形成本地B/S模式解决方案。其中electron作为fe的容器，类似chrome，负责界面的展现和本地服务和远端服务的编排和调用，实现业务流程。pyui4win作为本地服务，负责一些业务功能的实现。该服务有一个隐藏的主窗口，目的是创建一个消息泵，来接受和响应electron发送的各种业务请求消息，执行请求的功能，并将结果返回给electron。它们之间采用wm_copydata消息来完成消息的传递，消息的处理也是异步的。和webbrowser版本类似，它们都可以和远端服务交互，调用远端服务的功能
+
+和webbrowser版本相比，这种实践不在依赖ie，没有兼容性问题，不受客户环境上ie版本的限制。毕竟目前在很多企业中，有很多ie版本并存。
+
+
 # 简单界面实践
 除了最佳实践，也可以用界面设计器直接配置界面。界面设计器会自动生成界面处理框架代码
 
 # Demo
 Tamplate下是一个简单界面实践demo。该demo用xml配置界面。
-DemoWeb下是pyui4win最佳实践demo。
+DemoWeb下是pyui4win最佳实践（webbrowser版本）demo。
+pyui4win最佳实践（electron版本）demo敬请期待
 
-# 注意事项
-请不要用ctype方式调用windows messagebox对话框或者其他标准对话框，需要时可以使用pyui4win里面已经封装好的标准对话框，或者自己在pyui4win中做扩展。用ctype调用其它的api都没有问题。至于原因，还没有时间研究，猜测是与duilib的实现方式和ctype的实现方式有关系。期待对这个问题有研究的同学可以告诉我 :)
 
 # vs electron
-electron是一个非常有名的框架。采用该框架，界面逻辑和业务逻辑都可以采用js开发。它有非常成功的案例。由于客户端程序的复杂性，electron要求开发人员不仅是专业的js开发人员，而且还需要多种其他技能，比如多线程，同步等等rd同学的技能。如果团队中有这样高水平的fe同学，可以考虑electron。pyui4win应用框架采用的界面层和业务逻辑层分离的方式，降低了系统复杂度，这也相应降低了对开发人员的技能要求。如何选择，需要根据研发团队的水平和开发投入综合决定。
+electron是一个非常有名的框架。采用该框架，界面逻辑和业务逻辑都可以采用js开发。它有非常成功的案例。与pyui4win最佳实践(electron版本)相比，最大的不同在于业务功能前者用nodejs开发，后者用python开发。如何选择，需要根据研发团队的水平和开发投入综合决定。
 
 # vs cefpython
-CEFPython 是 CEF 的 Python 绑定实现。但是莫名的崩溃是一个还是open中的问题，所以，我会拿它来做一些自己的一些工具。但是商业化的产品，我想还是暂时不要冒这个风险
+CEFPython 是 CEF 的 Python 绑定实现。但是莫名的崩溃是一个还是open中的问题，所以，我会拿它来做一些自己的一些工具。但是商业化的产品，我暂时不会冒这个风险
 
