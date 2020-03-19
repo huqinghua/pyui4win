@@ -1,4 +1,4 @@
 “¿¿µø‚:
-boost_1_53_0
-python27
+boost_1_66_0
+python3.6
 
