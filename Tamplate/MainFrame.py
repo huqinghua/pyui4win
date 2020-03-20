@@ -121,7 +121,7 @@ class MainFrame(PyFrameBase):
                     msgbytes = msgstr.encode('utf-8')
                     copydata = COPYDATASTRUCT(None, len(msgbytes), msgbytes)
                     for i in range(1, 100):
-                        tiem.sleep(1)
+                        # time.sleep(1)
                         PyLog().LogText('%d'%i)
                         windll.user32.SendMessageA(hwnd, 0x4a, None, byref(copydata))
 
