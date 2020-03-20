@@ -120,7 +120,7 @@ STDMETHODIMP DuiLib::CWebBrowserUI::Invoke( DISPID dispIdMember, REFIID riid, LC
 					char* lpszText2 = b;
 					int retfrompy = ::SendMessage(::GetParent(this->GetHostWindow()), WM_USER, (WPARAM)lpszText2, NULL);
 					if (retfrompy && pVarResult) {
-						*pVarResult = CComVariant((LPCSTR)(retfrompy + 20));
+						*pVarResult = CComVariant((LPCSTR)(retfrompy + 16));
 					}
 				}
 			break;

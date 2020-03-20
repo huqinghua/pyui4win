@@ -64,23 +64,6 @@ class MainFrame(PyFrameBase):
         self.DriverDiagnoseTab = self.PyFindVerticalLayout("DriverDiagnoseTab")
         self.TLU_client = self.PyFindTabLayout("TLU_client")
 
-    def browse_file(self, title):
-        """Ask the user to select a single file.  Return full path"""
-        import win32gui
-        try:
-            ret = win32gui.GetOpenFileNameW(None,
-                                            Flags=win32con.OFN_EXPLORER
-                                            | win32con.OFN_FILEMUSTEXIST
-                                            | win32con.OFN_HIDEREADONLY,
-                                            Title=title)
-        except pywintypes.error as e:
-            logger = logging.getLogger(__name__)
-            if 0 == e.winerror:
-                logger.debug('browse_file(): user cancelled')
-            else:
-                logger.exception('exception in browse_file()')
-            return None
-        return ret[0]
         
     # 界面事件处理
     def OnNotify(self, sendor, sType, wParam, lParam):
@@ -98,15 +81,6 @@ class MainFrame(PyFrameBase):
                 self.CloseWindow()
                 
             elif sendor == "btnOpenLog":
-                import ProcessInfo
-                print(ProcessInfo.get_memory_usage())
-
-                import psutil
-                
-                process_instance = psutil.Process(os.getpid())
-                print(process_instance.cpu_percent(None))
-                print(process_instance.cpu_percent(None))
-
                 print(PyWin32Util.GetExeDirectory())
                 applog = PyWin32Util.GetExeDirectory() + '\\applog\\applog.ini'
                 print(applog)
@@ -114,12 +88,6 @@ class MainFrame(PyFrameBase):
                     windll.Shell32.ShellExecuteW(0, 'open',applog, None, None, 1)
 
             elif sendor == "btnClearLog":
-                windll.user32.MessageBoxW(0, "中文", "Your title", win32con.MB_YESNO)
-                windll.user32.MessageBoxA(0, "中文".encode('gbk'), "Your title".encode('gbk'), win32con.MB_YESNO)
-
-                
-                print(self.browse_file('测试'))  # 崩溃
-
                 self.txtDiagnose.SetText('')
                 applog = PyWin32Util.GetExeDirectory() + '\\applog\\applog.ini'
                 if os.path.isfile(applog):
@@ -136,22 +104,27 @@ class MainFrame(PyFrameBase):
                     self.StopAnimation()
                     PyLog().LogText('PyThreadExecute exit')
 
+                # 多线程测试
                 t = threading.Thread(target=PyThreadPythonExecute)
                 t.start()
 
-                # hwnd = windll.user32.FindWindowW(None, '计算器')
-                # if windll.user32.IsWindow(hwnd):
-                #     msgstr = '计算器' + '\0'
-                #     print(len(msgstr))
+                # ctypes测试
+                windll.user32.MessageBoxW(0, "中文", "Your title", win32con.MB_YESNO)
+                windll.user32.MessageBoxA(0, "中文".encode('gbk'), "Your title".encode('gbk'), win32con.MB_YESNO)
 
-                #     msgbytes = msgstr.encode('utf-8')
-                #     copydata = COPYDATASTRUCT(None, len(msgbytes), msgbytes)
-                #     for i in range(1, 100):
-                #         tiem.sleep(1)
-                #         PyLog().LogText('%d'%i)
-                #         windll.user32.SendMessageA(hwnd, 0x4a, None, byref(copydata))
+                # 进程间消息测试
+                hwnd = windll.user32.FindWindowW(None, '计算器')
+                if windll.user32.IsWindow(hwnd):
+                    msgstr = '计算器' + '\0'
+                    print(len(msgstr))
 
-                #self.ExecutePython()
+                    msgbytes = msgstr.encode('utf-8')
+                    copydata = COPYDATASTRUCT(None, len(msgbytes), msgbytes)
+                    for i in range(1, 100):
+                        tiem.sleep(1)
+                        PyLog().LogText('%d'%i)
+                        windll.user32.SendMessageA(hwnd, 0x4a, None, byref(copydata))
+
             elif sendor == "OU_home":
                 pass
             elif sendor == "OU_back":
@@ -184,13 +157,9 @@ class MainFrame(PyFrameBase):
     def AppendAndLog(self, line):
         PyLog().LogText( line)
         msg = self.txtDiagnose.GetText()
-        # print(sys.getdefaultencoding())
-        # print(sys.path)
         print(type(msg))
         print(msg)
         print(G2U(msg))
-        # print(msg.decode('gbk'))
-        # print('转码后的字节串(%s)：\n%s' % (chardet.detect(utf8_bytes)['encoding'], utf8_bytes))
         self.txtDiagnose.SetText(U2G(G2U(msg) + '\n' + line))
 
     def ShowAndLog(self, line):
@@ -216,7 +185,7 @@ class MainFrame(PyFrameBase):
                     # PyLog().LogText('%d'%i)
                     windll.user32.SendMessageA(hwnd, 0x4a, None, byref(copydata))
 
-            # self.AppendAndLog('等待 %d 秒' % i)
+            self.AppendAndLog('等待 %d 秒' % i)
             time.sleep(1)
             i = i + 1
 
