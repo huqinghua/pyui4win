@@ -112,6 +112,13 @@ class MainFrame(PyFrameBase):
                 windll.user32.MessageBoxW(0, "中文", "Your title", win32con.MB_YESNO)
                 windll.user32.MessageBoxA(0, "中文".encode('gbk'), "Your title".encode('gbk'), win32con.MB_YESNO)
 
+                import win32gui
+                win32gui.MessageBox(0,
+                     'text', 'title',
+                     win32con.MB_YESNO | win32con.MB_ICONINFORMATION |
+                     win32con.MB_SYSTEMMODAL)
+
+
                 # 进程间消息测试
                 hwnd = windll.user32.FindWindowW(None, '计算器')
                 if windll.user32.IsWindow(hwnd):
@@ -120,7 +127,7 @@ class MainFrame(PyFrameBase):
 
                     msgbytes = msgstr.encode('utf-8')
                     copydata = COPYDATASTRUCT(None, len(msgbytes), msgbytes)
-                    for i in range(1, 100):
+                    for i in range(1, 2):
                         # time.sleep(1)
                         PyLog().LogText('%d'%i)
                         windll.user32.SendMessageA(hwnd, 0x4a, None, byref(copydata))
@@ -181,8 +188,9 @@ class MainFrame(PyFrameBase):
 
                 msgbytes = msgstr.encode('utf-8')
                 copydata = COPYDATASTRUCT(None, len(msgbytes), msgbytes)
-                for j in range(1, 2):
+                for j in range(1, 200):
                     # PyLog().LogText('%d'%i)
+                    
                     windll.user32.SendMessageA(hwnd, 0x4a, None, byref(copydata))
 
             self.AppendAndLog('等待 %d 秒' % i)
