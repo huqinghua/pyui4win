@@ -1,1 +1,1 @@
-先解压lib.rar, dll.rar, 再执行Launcher.exe
+覆盖Template下的文件，执行launcher.exe
