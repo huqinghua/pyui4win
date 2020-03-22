@@ -24,21 +24,8 @@ def addsxx(a:int, b:int) -> int:
 class MainFrame(PyFrameBase):
     def __init__(self):
         super(MainFrame, self).__init__()
-        self.clsName = self.__class__.__name__
-        self.skinFileName = self.__class__.__name__ + '.xml'
-
-    # 不要改动
-    def GetSkinFile(self):
-        return self.skinFileName
-
-    # 不要改动
-    def GetWindowClassName(self):
-        return self.clsName
-
-    # 退出处理
-    def OnClose(self, uMsg, wParam, lParam):
-        windll.kernel32.ExitProcess(0)
-        return 0
+        self.clsName = self.__class__.__name__  # 不要改动
+        self.skinFileName = self.__class__.__name__ + '.xml'  # 不要改动
 
     # 准备显示前的处理
     def OnPrepare(self, sendor, wParam, lParam):
@@ -64,101 +51,97 @@ class MainFrame(PyFrameBase):
         self.DriverDiagnoseTab = self.PyFindVerticalLayout("DriverDiagnoseTab")
         self.TLU_client = self.PyFindTabLayout("TLU_client")
 
-        
+    # 退出处理
+    def OnClose(self, uMsg, wParam, lParam):
+        ctypes.windll.kernel32.ExitProcess(0)
+        return 0
+
+    def minbtn_click(self, sendor, sType, wParam, lParam):
+        self.MinimizeWindow()
+
+    def maxbtn_click(self, sendor, sType, wParam, lParam):
+        self.MaximizeWindow()
+
+    def btnOpenLog_click(self, sendor, sType, wParam, lParam):
+        print(PyWin32Util.GetExeDirectory())
+        applog = PyWin32Util.GetExeDirectory() + '\\applog\\applog.ini'
+        print(applog)
+        if os.path.isfile(applog):
+            windll.Shell32.ShellExecuteW(0, 'open',applog, None, None, 1)
+
+    def restorebtn_click(self, sendor, sType, wParam, lParam):
+        self.RestoreWindow()
+
+    def closebtn_click(self, sendor, sType, wParam, lParam):
+        self.CloseWindow()
+
+    def btnClearLog_click(self, sendor, sType, wParam, lParam):
+        self.txtDiagnose.SetText('')
+        applog = PyWin32Util.GetExeDirectory() + '\\applog\\applog.ini'
+        if os.path.isfile(applog):
+            os.remove(applog)
+
+    def btnExcute_click(self, sendor, sType, wParam, lParam):
+        def PyThreadPythonExecute():
+            try:
+                self._StartAnimation()
+                self._ExecutePython()
+            except Exception as e:
+                PyLog().LogText(str(traceback.format_exc()))
+            self._StopAnimation()
+            PyLog().LogText('PyThreadExecute exit')
+
+        # 多线程测试
+        t = threading.Thread(target=PyThreadPythonExecute)
+        t.start()
+
+        # ctypes测试
+        windll.user32.MessageBoxW(0, "中文", "Your title", win32con.MB_YESNO)
+        windll.user32.MessageBoxA(0, "中文".encode('gbk'), "Your title".encode('gbk'), win32con.MB_YESNO)
+
+        # win32gui测试
+        import win32gui
+        win32gui.MessageBox(self.GetHWnd(),
+                '中文', 'Your title',
+                win32con.MB_YESNO | win32con.MB_ICONINFORMATION |
+                win32con.MB_SYSTEMMODAL)
+
+        (a, b, c) = win32gui.GetOpenFileNameW()
+        print(a, b, c)
+        win32gui.MessageBox(self.GetHWnd(),
+                a, str(b),
+                win32con.MB_YESNO | win32con.MB_ICONINFORMATION |
+                win32con.MB_SYSTEMMODAL)
+
+
+        # 进程间消息测试
+        hwnd = windll.user32.FindWindowW(None, '计算器')
+        if windll.user32.IsWindow(hwnd):
+            msgstr = '计算器' + '\0'
+            print(len(msgstr))
+
+            msgbytes = msgstr.encode('utf-8')
+            copydata = COPYDATASTRUCT(None, len(msgbytes), msgbytes)
+            for i in range(1, 2):
+                # time.sleep(1)
+                PyLog().LogText('%d'%i)
+                windll.user32.SendMessageA(hwnd, 0x4a, None, byref(copydata))
+
     # 界面事件处理
-    def OnNotify(self, sendor, sType, wParam, lParam):
+    def OnNotifyInternal(self, sendor, sType, wParam, lParam):
         # 用户点击事件
         if sType == DUI_MSGTYPE_CLICK:
-            if sendor == "minbtn":
-                self.MinimizeWindow()
-            elif sendor == "maxbtn":
-                self.MaximizeWindow()
-                
-            elif sendor == "restorebtn":
-                self.RestoreWindow()
-                
-            elif sendor == "closebtn":
-                self.CloseWindow()
-                
-            elif sendor == "btnOpenLog":
-                print(PyWin32Util.GetExeDirectory())
-                applog = PyWin32Util.GetExeDirectory() + '\\applog\\applog.ini'
-                print(applog)
-                if os.path.isfile(applog):
-                    windll.Shell32.ShellExecuteW(0, 'open',applog, None, None, 1)
-
-            elif sendor == "btnClearLog":
-                self.txtDiagnose.SetText('')
-                applog = PyWin32Util.GetExeDirectory() + '\\applog\\applog.ini'
-                if os.path.isfile(applog):
-                    os.remove(applog)
-
-            elif sendor == "btnExcute":
-
-                def PyThreadPythonExecute():
-                    try:
-                        self.StartAnimation()
-                        self.ExecutePython()
-                    except Exception as e:
-                        PyLog().LogText(str(traceback.format_exc()))
-                    self.StopAnimation()
-                    PyLog().LogText('PyThreadExecute exit')
-
-                # 多线程测试
-                t = threading.Thread(target=PyThreadPythonExecute)
-                t.start()
-
-                # ctypes测试
-                windll.user32.MessageBoxW(0, "中文", "Your title", win32con.MB_YESNO)
-                windll.user32.MessageBoxA(0, "中文".encode('gbk'), "Your title".encode('gbk'), win32con.MB_YESNO)
-
-                import win32gui
-                win32gui.MessageBox(0,
-                     'text', 'title',
-                     win32con.MB_YESNO | win32con.MB_ICONINFORMATION |
-                     win32con.MB_SYSTEMMODAL)
-
-
-                # 进程间消息测试
-                hwnd = windll.user32.FindWindowW(None, '计算器')
-                if windll.user32.IsWindow(hwnd):
-                    msgstr = '计算器' + '\0'
-                    print(len(msgstr))
-
-                    msgbytes = msgstr.encode('utf-8')
-                    copydata = COPYDATASTRUCT(None, len(msgbytes), msgbytes)
-                    for i in range(1, 2):
-                        # time.sleep(1)
-                        PyLog().LogText('%d'%i)
-                        windll.user32.SendMessageA(hwnd, 0x4a, None, byref(copydata))
-
-            elif sendor == "OU_home":
-                pass
-            elif sendor == "OU_back":
-                pass
-            elif sendor == "OU_forward":
-                pass
-            elif sendor == "OU_genPwd3":
-                pass
-            elif sendor == "OU_genPwd4":
-                pass
-            elif sendor == "OU_genPwd5":
-                pass
-            elif sendor == "OU_genPwd6":
-                pass
-            elif sendor == "OU_enableProxy":
-                pass
-            elif sendor == "OU_disableProxy":
-                pass
-
+            if hasattr(self, '{}_click'.format(sendor)):
+                getattr(self, '{}_click'.format(sendor))(sendor, sType, wParam, lParam)
+            
         # 用户选择事件
         if sType == DUI_MSGTYPE_ITEMSELECT:
             pass
 
-    def StopAnimation(self):
+    def _StopAnimation(self):
         self.AnimationJuhua1.StopAnimation()
 
-    def StartAnimation(self):
+    def _StartAnimation(self):
         self.AnimationJuhua1.StartAnimation()
 
     def AppendAndLog(self, line):
@@ -173,7 +156,7 @@ class MainFrame(PyFrameBase):
         PyLog().LogText( line)
         self.txtDiagnose.SetText(line)
 
-    def ExecutePython(self):
+    def _ExecutePython(self):
         CommonUtils.ReverseToExePath()
         ISOTIMEFORMAT='%Y-%m-%d %X'
         self.ShowAndLog(time.strftime( ISOTIMEFORMAT, time.localtime() ))

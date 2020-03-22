@@ -9,6 +9,7 @@ from Dui4Win import PyUIBase
 from Dui4Win import PyLog
 from Dui4Win import PyFrameCreator
 import win32con
+import ctypes
 
 
 
@@ -412,12 +413,21 @@ class PyFrameBase(PyUIBase):
         """
         try:
             if logText:
-                PyLog().LogText(newline)
+                PyLog().LogText(msg)
             
-            # print(msg)
+            print(msg)
         except:
+            print(traceback.format_exc())
             pass
             
+    # 不要改动
+    def GetSkinFile(self):
+        return self.skinFileName
+
+    # 不要改动
+    def GetWindowClassName(self):
+        return self.clsName
+
     #virtual void OnFinalMessage(HWND hWnd);
     def OnFinalMessage(self, hWnd):
         return 0
@@ -460,6 +470,16 @@ class PyFrameBase(PyUIBase):
     def OnPrepare(self, sendor, wParam, lParam):
         try:
             return self.OnPrepareInternal(sendor, wParam, lParam)
+        except:
+            self.SecurePrint(traceback.format_exc()) 
+            pass
+
+        return 0
+
+    #virtual void OnNotify(LPCSTR sendor, LPCSTR sType, WPARAM wParam, LPARAM lParam);
+    def OnNotify(self, sendor, sType, wParam, lParam):
+        try:
+            return self.OnNotifyInternal(sendor, sType, wParam, lParam)
         except:
             self.SecurePrint(traceback.format_exc()) 
             pass

@@ -10,7 +10,7 @@
     <VerticalLayout bordersize="2" height="654" bkimage="file=&apos;dialog_background_new.png&apos; corner=&apos;95,715,2,255&apos;">
         <HorizontalLayout name="HLU_caption" height="95">
             <HorizontalLayout width="179" height="95">
-                <Label float="true" pos="43,11,0,0" width="72" height="72" bkimage="xiaoniu.png" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
+                <Label float="true" pos="43,11,0,0" width="72" height="72" bkimage="dragon.jpg" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" />
             </HorizontalLayout>
             <VerticalLayout>
                 <HorizontalLayout height="24">
