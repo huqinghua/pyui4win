@@ -446,6 +446,14 @@ class PyFrameBase(PyUIBase):
 
         return 0
 
+    # 界面事件处理
+    def OnNotifyInternal(self, sendor, sType, wParam, lParam):
+        fname = '{}_{}'.format(sendor, sType)
+        # print(fname)
+        if hasattr(self, fname):
+            fn = getattr(self, fname)
+            fn(sendor, sType, wParam, lParam)
+
     #virtual LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
     def HandleMessage(self, uMsg, wParam, lParam):
         try:

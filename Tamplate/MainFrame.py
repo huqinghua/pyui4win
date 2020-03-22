@@ -127,17 +127,6 @@ class MainFrame(PyFrameBase):
                 PyLog().LogText('%d'%i)
                 windll.user32.SendMessageA(hwnd, 0x4a, None, byref(copydata))
 
-    # 界面事件处理
-    def OnNotifyInternal(self, sendor, sType, wParam, lParam):
-        # 用户点击事件
-        if sType == DUI_MSGTYPE_CLICK:
-            if hasattr(self, '{}_click'.format(sendor)):
-                getattr(self, '{}_click'.format(sendor))(sendor, sType, wParam, lParam)
-            
-        # 用户选择事件
-        if sType == DUI_MSGTYPE_ITEMSELECT:
-            pass
-
     def _StopAnimation(self):
         self.AnimationJuhua1.StopAnimation()
 
