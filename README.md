@@ -79,8 +79,8 @@ DemoWeb下是pyui4win最佳实践（webbrowser版本）demo。<br />
 pyui4win最佳实践（electron版本）demo敬请期待
 
 # vs electron
-electron是一个非常有名的框架。采用该框架，界面逻辑和业务逻辑都可以采用js开发。它有非常成功的案例。与pyui4win最佳实践(electron版本)相比，最大的不同在于业务功能前者用nodejs开发，后者用python开发。如何选择，需要根据研发团队的水平和开发投入综合决定。
+electron是一个非常有名的框架。采用该框架，界面逻辑和业务逻辑都可以采用js开发。它有非常成功的案例。与pyui4win最佳实践(electron版本)相比，最大的不同在于业务功能前者用nodejs开发，后者用python开发。python有很多久经考验的库，这点我比较喜欢。
 
 # vs cefpython
-CEFPython 是 CEF 的 Python 绑定实现。但是莫名的崩溃是一个还是open中的问题，所以，我会拿它来做一些自己的一些工具。
+CEFPython 是 CEF 的 Python 绑定实现。它是一个很棒的项目。目前也没有接触过它应用的复杂成功案例。我尝试拿它来做过自己的一些工具，结果也不错。但不知道它在复杂的产品化项目中是否有很稳定的表现。如果你在这方面有研究，请告诉我。
 
