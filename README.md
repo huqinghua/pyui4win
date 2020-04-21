@@ -1,7 +1,7 @@
 pyui4win
 ========
 
-一个用python实现业务逻辑、用xml和html/css/js描述界面的windows程序的快速开发框架
+一个用python实现业务逻辑、用xml和html/css/js描述界面的windows程序的快速开发框架。该框架将duilib和python运行时结合到一起，可以快速构建direct ui界面的应用，同时利用python及其众多久经考验的库编写业务逻辑，缩短开发周期。
 
 # 应用框架
 ![](doc/应用框架.png)
