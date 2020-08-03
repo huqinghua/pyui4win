@@ -1,7 +1,7 @@
 pyui4win
 ========
 
-一个用python实现业务逻辑、用xml和html/css/js描述界面的windows程序的快速开发框架。该框架将duilib运行时和python运行时结合到一起，实现用xml快速构建界面的同时，利用python及其众多久经考验的库编写业务逻辑，极大地缩短开发周期。该框架适合非计算密集型客户端产品。在百度IPA产品中有很成功的应用 :)
+一个用python实现业务逻辑、用xml和html/css/js描述界面的windows程序的快速开发框架。该框架将duilib运行时和python运行时结合到一起，实现用xml快速构建界面的同时，利用python及其众多久经考验的库编写业务逻辑，极大地缩短开发周期。该框架适合非计算密集型客户端产品。
 
 # 应用框架
 ![](doc/应用框架.png)
@@ -76,11 +76,5 @@ js调用python例程，并获取json格式结果：
 # Demo
 Tamplate下是一个简单界面实践demo。该demo用xml配置界面。<br />
 DemoWeb下是pyui4win最佳实践（webbrowser版本）demo。<br />
-pyui4win最佳实践（electron版本）demo敬请期待
 
-# vs electron
-electron是一个非常有名的框架。采用该框架，界面逻辑和业务逻辑都可以采用js开发。它有非常成功的案例。与pyui4win最佳实践(electron版本)相比，最大的不同在于业务功能前者用nodejs开发，后者用python开发。python有很多久经考验的库，这点我比较喜欢。
-
-# vs cefpython
-CEFPython 是 CEF 的 Python 绑定实现。它是一个很棒的项目。我尝试拿它来做过自己的一些简单工具，结果也不错。但不知道它在复杂的商业产品中是否有很稳定的表现。目前也没有接触过它应用的复杂案例。
 
